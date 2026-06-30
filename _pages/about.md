@@ -26,7 +26,7 @@ latest_posts:
 
 {% include custom_styles.liquid %}
 
-I am a Research Intern in the Siemens Digital Manufacturing Technologies Research Group, working on Geometric Deep Learning and 3D Vision, where I develop self-supervised architectures to understand complex industrial 3D models.
+Currently a Research Intern in the Siemens Digital Manufacturing Technologies Research Group, I work on Geometric Deep Learning and 3D Vision, developing self-supervised architectures to understand complex industrial 3D models.
 
 I'm a student at [Télécom Paris](https://www.telecom-paris.fr/en/home), one of France's top engineering schools, where I'm pursuing an engineering degree in Applied Mathematics, Signal Processing & Artificial Intelligence. I am also currently enrolled in the [Master IASD](https://dauphine.psl.eu/en/training/masters-degrees/computer-science/m2-artificial-intelligence-systems-data) (Artificial Intelligence, Systems, Data — Math Track), a joint program between ENS Paris, Mines Paris, and Université Paris-Dauphine within PSL Research University, for the academic year 2025–2026.
 

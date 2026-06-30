@@ -24,8 +24,8 @@ cv:
       - company: Siemens AG — Foundational Technologies
         position: AI Research Intern
         location: Munich, Germany
-        start_date: Apr 2026
-        end_date: Sept 2026
+        start_date: 2026
+        end_date: 2026
         summary: Research internship developing geometric deep learning models for 3D understanding of industrial CAD parts.
         highlights:
           - Built a causal data-generation pipeline to curate and annotate large-scale synthetic 3D training data with semantically valid labels.
@@ -40,10 +40,21 @@ cv:
         studyType: MScR IASD
         start_date: 2025
         end_date: 2026
-        courses: "Foundations of Machine Learning (F. Bach, ENS) · Reinforcement Learning (O. Cappé, ENS) · Machine Learning with Kernel Methods (J. Mairal, INRIA) · Computational Optimal Transport (G. Peyré, ENS) · Dimension Reduction and Manifold Learning (E. Aamari, ENS) · LLM for Code and Proof (M. Lelarge, ENS) · Advanced Machine Learning (Y. Chevaleyre, Dauphine) · High-Dimensional Statistics (V. Rivoirard, Dauphine) · Bayesian Statistics (J. Rousseau, Dauphine) · Deep Learning for Image Analysis (É. Decencière, Mines Paris) · Point Clouds and 3D Modeling (F. Goulette, Mines Paris)"
         highlights:
           - "Research-oriented Master's in Applied Mathematics, Learning, and Modeling."
           - "PSL Research University joint Master's program with ENS Paris, Université Paris-Dauphine & Mines Paris."
+          - "**Relevant courses:**"
+          - "Foundations of Machine Learning (F. Bach, ENS)"
+          - "Reinforcement Learning (O. Cappé, ENS)"
+          - "Machine Learning with Kernel Methods (J. Mairal, INRIA)"
+          - "Computational Optimal Transport (G. Peyré, ENS)"
+          - "Dimension Reduction and Manifold Learning (E. Aamari, ENS)"
+          - "LLM for Code and Proof (M. Lelarge, ENS)"
+          - "Advanced Machine Learning (Y. Chevaleyre, Dauphine)"
+          - "High-Dimensional Statistics (V. Rivoirard, Dauphine)"
+          - "Bayesian Statistics (J. Rousseau, Dauphine)"
+          - "Deep Learning for Image Analysis (É. Decencière, Mines Paris)"
+          - "Point Clouds and 3D Modeling (F. Goulette, Mines Paris)"
 
       - institution: Télécom Paris — Institut Polytechnique de Paris
         location: Paris, France
@@ -54,8 +65,8 @@ cv:
         end_date: 2026
         highlights:
           - "Top-tier French engineering school, leader in the field of digital technology."
-          - "Random Modeling Track: Martingales · Markov Chains · Stochastic Processes (Brownian motion, Poisson process) · High-Dimensional Probability · Numerical Analysis (Newton, Monte-Carlo)."
-          - "Signal Processing for AI Track: Statistics · Optimization for ML · Time-Series Analysis · Machine Learning · Deep Learning (CNN, RNN, VAE, GAN, Transformers) · LLM · Audio & Speech Processing · Databases."
+          - "**Random Modeling Track:** Martingales · Markov Chains · Stochastic Processes (Brownian motion, Poisson process) · High-Dimensional Probability · Numerical Analysis (Newton, Monte-Carlo)."
+          - "**Signal Processing for AI Track:** Statistics · Optimization for ML · Time-Series Analysis · Machine Learning · Deep Learning (CNN, RNN, VAE, GAN, Transformers) · LLM · Audio & Speech Processing · Databases."
 
       - institution: Lycée Condorcet — Preparatory Class for French Grandes Écoles
         location: Paris, France
