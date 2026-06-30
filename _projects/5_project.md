@@ -1,80 +1,40 @@
 ---
 layout: page
-title: project 5
-description: a project with a background image
-img: assets/img/1.jpg
-importance: 3
-category: fun
+title: "DeepSDF: Learning Continuous Signed Distance Functions for 3D Shapes"
+description: "Implicit neural 3D shape representation via auto-decoders and signed distance functions"
+img: assets/img/deepsdf.jpg
+importance: 5
+category: work
 ---
 
-Every project has a beautiful feature showcase page.
-It's easy to include images in a flexible 3-column grid format.
-Make your photos 1/3, 2/3, or full width.
+## Project Overview
 
-To give your project a background in the portfolio page, just add the img tag to the front matter like so:
+Prepared for the **3D Point Cloud and Modeling (NPM3D)** course of the IASD Master's program, this project presents an in-depth study of *DeepSDF: Learning Continuous Signed Distance Functions for Shape Representation* (Park et al.). DeepSDF represents surfaces **implicitly** as the zero-level-set of a neural network conditioned on a latent code, encoding an entire class of 3D shapes within a compact latent space — rather than relying on discrete voxel grids or parametric meshes.
 
-    ---
-    layout: page
-    title: project
-    description: a project with a background image
-    img: /assets/img/12.jpg
-    ---
+## Key Concepts
 
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/3.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
+- **Implicit surfaces**: Shapes represented as the zero-level-set of a learned continuous SDF
+- **Auto-decoder formulation**: A decoder-only network trained by jointly optimizing the network weights and per-shape latent vectors
+- **Inference from partial data**: MAP estimation recovers shapes from partial observations
+- **Reproduced experiments**: Shape reconstruction and latent-space interpolation, confirming the paper's central claims
+
+## Technologies
+
+- **Language**: Python
+- **Framework**: PyTorch
+- **Techniques**: Signed Distance Functions, Auto-decoders, Marching Cubes, Latent-space interpolation
+
+## Project Report
+
+View or download the full project report:
+
+<div class="pdf-container" style="width: 100%; margin: 1rem 0;">
+  <iframe
+    src="{{ '/assets/pdf/project_reports/deepsdf_report.pdf' | relative_url }}"
+    type="application/pdf"
+    width="100%"
+    height="600px"
+    style="border: 1px solid #ddd; border-radius: 0.25rem;">
+    <p>Your browser does not support PDF embedding. <a href="{{ '/assets/pdf/project_reports/deepsdf_report.pdf' | relative_url }}" target="_blank">Download the PDF</a></p>
+  </iframe>
 </div>
-<div class="caption">
-    Caption photos easily. On the left, a road goes through a tunnel. Middle, leaves artistically fall in a hipster photoshoot. Right, in another hipster photoshoot, a lumberjack grasps a handful of pine needles.
-</div>
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    This image can also have a caption. It's like magic.
-</div>
-
-You can also put regular text between your rows of images.
-Say you wanted to write a little bit about your project before you posted the rest of the images.
-You describe how you toiled, sweated, _bled_ for your project, and then... you reveal its glory in the next row of images.
-
-<div class="row justify-content-sm-center">
-    <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm-4 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    You can also have artistically styled 2/3 + 1/3 images, like these.
-</div>
-
-The code is simple.
-Just wrap your images with `<div class="col-sm">` and place them inside `<div class="row">` (read more about the <a href="https://getbootstrap.com/docs/4.4/layout/grid/">Bootstrap Grid</a> system).
-To make images responsive, add `img-fluid` class to each; for rounded corners and shadows use `rounded` and `z-depth-1` classes.
-Here's the code for the last row of images above:
-
-{% raw %}
-
-```html
-<div class="row justify-content-sm-center">
-  <div class="col-sm-8 mt-3 mt-md-0">
-    {% include figure.liquid path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-  </div>
-  <div class="col-sm-4 mt-3 mt-md-0">
-    {% include figure.liquid path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-  </div>
-</div>
-```
-
-{% endraw %}

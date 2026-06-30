@@ -1,81 +1,44 @@
 ---
 layout: page
-title: project 8
-description: an other project with a background image and giscus comments
-img: assets/img/9.jpg
-importance: 2
+title: "2PAC: Asynchronous Blockchain Consensus Implementation"
+description: "Implementing and benchmarking the 2PAC BIG consensus protocol against GradedDAG"
+img: assets/img/2PAC.jpg
+importance: 8
 category: work
-giscus_comments: true
 ---
 
-Every project has a beautiful feature showcase page.
-It's easy to include images in a flexible 3-column grid format.
-Make your photos 1/3, 2/3, or full width.
+## Project Overview
 
-To give your project a background in the portfolio page, just add the img tag to the front matter like so:
+This project implements the **2PAC BIG** blockchain consensus protocol and benchmarks it against **GradedDAG**. 2PAC BIG is a more complex variant of 2PAC, developed in response to a vulnerability found in the *Ditto* consensus of Facebook's *Diem* blockchain. The aim was to demonstrate empirically that 2PAC BIG can commit blocks faster and more reliably than the previous state-of-the-art asynchronous consensus protocol under adverse network conditions.
 
-    ---
-    layout: page
-    title: project
-    description: a project with a background image
-    img: /assets/img/12.jpg
-    ---
+## Methodology
 
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/3.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    Caption photos easily. On the left, a road goes through a tunnel. Middle, leaves artistically fall in a hipster photoshoot. Right, in another hipster photoshoot, a lumberjack grasps a handful of pine needles.
-</div>
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    This image can also have a caption. It's like magic.
+- **Protocol implementation**: Full 2PAC BIG and GradedDAG node logic with leader election, voting and block commitment
+- **Network simulation**: Multithreading and sockets to simulate concurrent nodes, with controlled per-node delays (a randomly delayed node 4)
+- **Key scenario**: In the delay window where GradedDAG stalls, 2PAC is still able to commit blocks
+- **Results**: Across 1,000 simulations, 2PAC showed a **~7.2% higher commit success rate**, closely matching the ~8% theoretical advantage from the paper
+
+## Technologies
+
+- **Language**: Python
+- **Libraries**: PyNaCl, NumPy
+- **Methods**: Distributed consensus, Multithreading, Sockets, Cryptographic signatures
+
+## Project Poster
+
+View or download the project poster:
+
+<div class="pdf-container" style="width: 100%; margin: 1rem 0;">
+  <iframe
+    src="{{ '/assets/pdf/project_reports/2pac_blockchain_poster.pdf' | relative_url }}"
+    type="application/pdf"
+    width="100%"
+    height="600px"
+    style="border: 1px solid #ddd; border-radius: 0.25rem;">
+    <p>Your browser does not support PDF embedding. <a href="{{ '/assets/pdf/project_reports/2pac_blockchain_poster.pdf' | relative_url }}" target="_blank">Download the PDF</a></p>
+  </iframe>
 </div>
 
-You can also put regular text between your rows of images.
-Say you wanted to write a little bit about your project before you posted the rest of the images.
-You describe how you toiled, sweated, _bled_ for your project, and then... you reveal its glory in the next row of images.
+## Repository
 
-<div class="row justify-content-sm-center">
-    <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm-4 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    You can also have artistically styled 2/3 + 1/3 images, like these.
-</div>
-
-The code is simple.
-Just wrap your images with `<div class="col-sm">` and place them inside `<div class="row">` (read more about the <a href="https://getbootstrap.com/docs/4.4/layout/grid/">Bootstrap Grid</a> system).
-To make images responsive, add `img-fluid` class to each; for rounded corners and shadows use `rounded` and `z-depth-1` classes.
-Here's the code for the last row of images above:
-
-{% raw %}
-
-```html
-<div class="row justify-content-sm-center">
-  <div class="col-sm-8 mt-3 mt-md-0">
-    {% include figure.liquid path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-  </div>
-  <div class="col-sm-4 mt-3 mt-md-0">
-    {% include figure.liquid path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-  </div>
-</div>
-```
-
-{% endraw %}
+[View on GitHub](https://github.com/rayanedkh/blockchain-2PAC)
