@@ -9,6 +9,8 @@ display_categories: [work]
 horizontal: false
 ---
 
+{% include custom_styles.liquid %}
+
 <!-- pages/projects.md -->
 <div class="projects">
 {% if site.enable_project_categories and page.display_categories %}

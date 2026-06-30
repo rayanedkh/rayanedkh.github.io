@@ -24,8 +24,8 @@ cv:
       - company: Siemens AG — Foundational Technologies
         position: AI Research Intern
         location: Munich, Germany
-        start_date: 2026-04
-        end_date: 2026-09
+        start_date: Apr 2026
+        end_date: Sept 2026
         summary: Research internship developing geometric deep learning models for 3D understanding of industrial CAD parts.
         highlights:
           - Built a causal data-generation pipeline to curate and annotate large-scale synthetic 3D training data with semantically valid labels.
@@ -38,19 +38,20 @@ cv:
         url: https://www.master-iasd.eu/
         area: Artificial Intelligence, Systems, Data — Mathematics Track
         studyType: MScR IASD
-        start_date: 2025-09
-        end_date: 2026-12
+        start_date: 2025
+        end_date: 2026
+        courses: "Foundations of Machine Learning (F. Bach, ENS) · Reinforcement Learning (O. Cappé, ENS) · Machine Learning with Kernel Methods (J. Mairal, INRIA) · Computational Optimal Transport (G. Peyré, ENS) · Dimension Reduction and Manifold Learning (E. Aamari, ENS) · LLM for Code and Proof (M. Lelarge, ENS) · Advanced Machine Learning (Y. Chevaleyre, Dauphine) · High-Dimensional Statistics (V. Rivoirard, Dauphine) · Bayesian Statistics (J. Rousseau, Dauphine) · Deep Learning for Image Analysis (É. Decencière, Mines Paris) · Point Clouds and 3D Modeling (F. Goulette, Mines Paris)"
         highlights:
-          - "Top-tier French research-oriented program in Applied Mathematics, Learning & Modeling."
-          - "Relevant coursework: Reinforcement Learning · Advanced Machine Learning · Dimension Reduction & Manifold Learning · High-Dimensional Statistics · Bayesian Statistics · Deep Learning for Computer Vision · Optimal Transport for ML · Machine Learning with Kernel Methods · LLMs for Code & Proof · 3D Point Cloud and Modeling · Convex Optimization."
+          - "Research-oriented Master's in Applied Mathematics, Learning, and Modeling."
+          - "PSL Research University joint Master's program with ENS Paris, Université Paris-Dauphine & Mines Paris."
 
       - institution: Télécom Paris — Institut Polytechnique de Paris
         location: Paris, France
         url: https://www.telecom-paris.fr/en/home
         area: Applied Mathematics and Computer Science
         studyType: Engineering Degree (M.S.)
-        start_date: 2023-09
-        end_date: 2026-12
+        start_date: 2023
+        end_date: 2026
         highlights:
           - "Top-tier French engineering school, leader in the field of digital technology."
           - "Random Modeling Track: Martingales · Markov Chains · Stochastic Processes (Brownian motion, Poisson process) · High-Dimensional Probability · Numerical Analysis (Newton, Monte-Carlo)."
@@ -60,19 +61,19 @@ cv:
         location: Paris, France
         area: Scientific Track PSI* (Mathematics & Physics)
         studyType: CPGE
-        start_date: 2021-09
-        end_date: 2023-06
+        start_date: 2021
+        end_date: 2023
         highlights:
           - "Highly selective 2-year intensive program in Mathematics & Physics; ranked top 8% nationally."
 
     Skills:
-      - name: Programming
-        icon: fa-solid fa-code
-        keywords: "Python, SQL, TypeScript, C, LaTeX"
+      - name: Machine Learning & AI (Advanced)
+        icon: fa-solid fa-brain
+        keywords: "Computer Vision, Deep Learning, Neural Networks, PyTorch, TensorFlow"
 
-      - name: Tools & Frameworks
-        icon: fa-solid fa-toolbox
-        keywords: "NumPy, Pandas, Scikit-learn, TensorFlow, Keras, PyTorch, Git"
+      - name: Programming (Advanced)
+        icon: fa-solid fa-code
+        keywords: "Python, JavaScript, CUDA, Git"
 
     Languages:
       - name: French

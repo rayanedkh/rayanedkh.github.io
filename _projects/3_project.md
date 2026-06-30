@@ -1,11 +1,13 @@
 ---
 layout: page
-title: "Adversarial Robustness on CIFAR-10"
-description: "Studying adversarial robustness with PGD attacks, TRADES and strong augmentation"
+title: "Adversarial Robustness"
+description: "PGD attacks, TRADES and strong augmentation on CIFAR-10"
 img: assets/img/ADV_Training.jpg
 importance: 3
 category: work
 ---
+
+{% include custom_styles.liquid %}
 
 ## Project Overview
 

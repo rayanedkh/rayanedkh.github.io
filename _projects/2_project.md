@@ -1,11 +1,13 @@
 ---
 layout: page
-title: "Latent Space Manipulation: Improving and Tuning GAN Precision and Recall"
-description: "Controlling the precision–recall trade-off in GANs through f-divergences"
+title: "GAN Latent Space Tuning"
+description: "Controlling the precision–recall trade-off of GANs with f-divergences"
 img: assets/img/gan.jpg
 importance: 2
 category: work
 ---
+
+{% include custom_styles.liquid %}
 
 ## Project Overview
 

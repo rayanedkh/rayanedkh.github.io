@@ -1,11 +1,13 @@
 ---
 layout: page
-title: "2PAC: Asynchronous Blockchain Consensus Implementation"
-description: "Implementing and benchmarking the 2PAC BIG consensus protocol against GradedDAG"
+title: "2PAC Blockchain Consensus"
+description: "Implementing and benchmarking an asynchronous BFT consensus protocol"
 img: assets/img/2PAC.jpg
 importance: 8
 category: work
 ---
+
+{% include custom_styles.liquid %}
 
 ## Project Overview
 

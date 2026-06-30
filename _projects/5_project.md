@@ -1,11 +1,13 @@
 ---
 layout: page
-title: "DeepSDF: Learning Continuous Signed Distance Functions for 3D Shapes"
-description: "Implicit neural 3D shape representation via auto-decoders and signed distance functions"
+title: "DeepSDF"
+description: "Implicit neural 3D shape representation with signed distance functions"
 img: assets/img/deepsdf.jpg
 importance: 5
 category: work
 ---
+
+{% include custom_styles.liquid %}
 
 ## Project Overview
 

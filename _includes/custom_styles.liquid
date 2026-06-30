@@ -1,0 +1,71 @@
+<style>
+  /* ============================================================
+     Custom site overrides (Rayane) — injected per page.
+     Kept here so the CSS lives in one place.
+     ============================================================ */
+
+  /* --- Modern typography (Inter for text, Space Grotesk for titles) --- */
+  /* NB: deliberately does NOT target span / i / svg / .material-icons
+     so Font Awesome & Material icons keep their own font. */
+  body,
+  p,
+  li,
+  td,
+  th,
+  blockquote,
+  .post .desc,
+  .card-text,
+  .card-body,
+  .navbar-nav,
+  .nav-link,
+  .navbar-brand,
+  .cv,
+  footer {
+    font-family: 'Inter', sans-serif !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .post-title,
+  .card-title,
+  h2.category {
+    font-family: 'Space Grotesk', sans-serif !important;
+    letter-spacing: -0.015em;
+  }
+
+  /* --- Name in the about header: medium weight instead of heavy bold --- */
+  .post-title {
+    font-weight: 500 !important;
+  }
+  .post-title .font-weight-bold {
+    font-weight: 500 !important;
+  }
+
+  /* --- Project cards: hovered card grows, everything else blurs (à la Sacha) --- */
+  .projects .card {
+    transition:
+      transform 0.4s ease,
+      filter 0.4s ease,
+      opacity 0.4s ease;
+    position: relative;
+  }
+  .projects .card:hover {
+    transform: scale(1.05);
+    z-index: 10;
+  }
+  .projects:has(.card:hover) .card:not(:hover) {
+    filter: blur(4px);
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+  body:has(.projects .card:hover) .navbar:not(:hover),
+  body:has(.projects .card:hover) footer:not(:hover),
+  body:has(.projects .card:hover) .post-header:not(:hover) {
+    filter: blur(4px);
+    transition: filter 0.4s ease;
+  }
+</style>

@@ -1,11 +1,13 @@
 ---
 layout: page
-title: "hERG Cardiotoxicity Prediction — Hackathon Finalist (Top 4/25)"
-description: "Predicting hERG channel blockade from molecular descriptors — hackathon finalist"
+title: "hERG Cardiotoxicity Prediction"
+description: "Predicting hERG channel blockade from molecular structure"
 img: assets/img/herg.jpg
 importance: 7
 category: work
 ---
+
+{% include custom_styles.liquid %}
 
 ## Project Overview
 

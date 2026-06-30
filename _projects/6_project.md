@@ -1,11 +1,13 @@
 ---
 layout: page
-title: "VeSSAL: Streaming Active Learning with Deep Neural Networks (ICML 2023)"
-description: "Paper presentation — streaming batch active learning for deep networks"
+title: "Streaming Active Learning"
+description: "VeSSAL (ICML 2023): batch active learning for deep neural networks"
 img: assets/img/Vessal.jpg
 importance: 6
 category: work
 ---
+
+{% include custom_styles.liquid %}
 
 ## Project Overview
 

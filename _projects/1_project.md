@@ -1,11 +1,13 @@
 ---
 layout: page
-title: "Collaborative Filtering: Kernel Matrix Factorization & Kernel PCA"
-description: "Predicting user ratings with kernelized matrix factorization and PCA"
+title: "Collaborative Filtering"
+description: "Kernelized matrix factorization and PCA for rating prediction"
 img: assets/img/collaborative_filtering.jpg
 importance: 1
 category: work
 ---
+
+{% include custom_styles.liquid %}
 
 ## Project Overview
 

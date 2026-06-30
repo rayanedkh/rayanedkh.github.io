@@ -1,11 +1,13 @@
 ---
 layout: page
 title: "Kernel Methods for Image Classification"
-description: "CIFAR-10 image classification using only kernel methods — Kaggle Data Challenge"
+description: "CIFAR-10 classification with only kernel methods — Kaggle data challenge"
 img: assets/img/kernel.jpg
 importance: 4
 category: work
 ---
+
+{% include custom_styles.liquid %}
 
 ## Project Overview
 
