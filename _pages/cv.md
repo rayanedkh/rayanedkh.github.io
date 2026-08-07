@@ -4,7 +4,7 @@ permalink: /cv/
 title: CV
 nav: true
 nav_order: 3
-cv_pdf: /assets/pdf/rayane_dakhlaoui_cv.pdf # you can also use external links here
+cv_pdf: /assets/pdf/Dakhlaoui_Rayane_Resume.pdf # you can also use external links here
 cv_format: rendercv # options: rendercv, jsonresume
 description:
 toc:

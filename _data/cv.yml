@@ -3,8 +3,8 @@ cv:
   label: AI Research Intern @ Siemens AG
   email: rayane.dakhlaoui@telecom-paris.fr
   location: "Paris & Munich"
-  image: "pdp.png"
-  summary: Research Intern at Siemens AG working on Geometric Deep Learning and 3D Vision. Engineering student at Télécom Paris and Master IASD (PSL Research University). Interested in representation learning, World Models, and Embodied AI.
+  image: ""
+  summary: AI Research Intern at Siemens AG working on self-supervised representation learning for 3D CAD models. Engineering student at Télécom Paris and MSc IASD (PSL Research University). Research interests — representation & self-supervised learning, 3D computer vision & geometric deep learning, and World Models & Physical AI.
 
   social_networks:
     - network: GitHub
@@ -26,18 +26,19 @@ cv:
         location: Munich, Germany
         start_date: 2026
         end_date: 2026
-        summary: Research internship developing geometric deep learning models for 3D understanding of industrial CAD parts.
+        summary: Designing a novel self-supervised representation learning framework for 3D CAD (Boundary-Representation) models, built on a Joint-Embedding Predictive Architecture (JEPA).
         highlights:
-          - Built a causal data-generation pipeline to curate and annotate large-scale synthetic 3D training data with semantically valid labels.
-          - Designed self-supervised pre-training via a Joint-Embedding Predictive Architecture (JEPA), with latent-space prediction over a point-cloud backbone (Utonia) and few-shot transfer to scarce real data.
-          - Combined heterogeneous graph neural networks (Graph Transformers) with point-cloud representations for structured 3D feature recognition.
+          - Built a geometry encoder over a geometric Attributed Adjacency Graph, coupling Cross-Scale Mutual Attention with edge-aware Message Passing (Graph Transformer); benchmarked an enhanced Point Transformer v3 point-cloud backbone (Utonia) as an alternative encoder.
+          - Ran an instrumented study isolating what a latent-prediction objective can and cannot force; frozen linear-probe transfer reached 0.71 accuracy (+0.38 over a matched random-init control) in the label-scarce regime (<0.5% labels).
+          - Engineered a geometry-driven module auto-generating PMI (GD&T tolerances & datums) from CAD geometry to automate CMM inspection planning.
+          - Designed the pretraining for few-shot transfer across downstream tasks — automated machining-feature recognition (CAM), part segmentation & classification.
 
     Education:
       - institution: PSL Research University
         location: Paris, France
         url: https://www.master-iasd.eu/
-        area: Artificial Intelligence, Systems, Data — Mathematics Track
-        studyType: MScR IASD
+        area: Artificial Intelligence, Systems & Data — Mathematics Track
+        studyType: MSc IASD
         start_date: 2025
         end_date: 2026
         highlights:
@@ -65,8 +66,8 @@ cv:
         end_date: 2026
         highlights:
           - "Top-tier French engineering school, leader in the field of digital technology."
-          - "**Random Modeling Track:** Martingales · Markov Chains · Stochastic Processes (Brownian motion, Poisson process) · High-Dimensional Probability · Numerical Analysis (Newton, Monte-Carlo)."
-          - "**Signal Processing for AI Track:** Statistics · Optimization for ML · Time-Series Analysis · Machine Learning · Deep Learning (CNN, RNN, VAE, GAN, Transformers) · LLM · Audio & Speech Processing · Databases."
+          - "**Stochastic Processes & Scientific Computing:** Martingales · Markov chains · Stochastic Processes (Brownian motion, Poisson process) · High-Dimensional Probability · Statistical Learning · Numerical Analysis (Newton, Monte-Carlo)."
+          - "**Signal Processing & Artificial Intelligence Track:** Statistics · Optimization · Time-Series Analysis · Machine Learning · Deep Learning (CNN, RNN, VAE, GAN, Transformers) · LLM · Audio & Speech Processing · Databases."
 
       - institution: Lycée Condorcet — Preparatory Class for French Grandes Écoles
         location: Paris, France
