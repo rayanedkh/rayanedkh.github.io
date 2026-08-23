@@ -4,7 +4,7 @@ cv:
   email: rayane.dakhlaoui@telecom-paris.fr
   location: "Paris & Munich"
   image: ""
-  summary: AI Research Intern at Siemens AG working on self-supervised representation learning for 3D CAD models. Engineering student at Télécom Paris and MSc IASD (PSL Research University). Research interests — representation & self-supervised learning, 3D computer vision & geometric deep learning, and World Models & Physical AI.
+  summary: AI Research Intern at Siemens AG working on self-supervised representation learning for 3D CAD models. Engineering student at Télécom Paris and MSc IASD (PSL Research University). Research interests — representation & self-supervised learning, World Models & Embodied AI, and 3D computer vision & geometric deep learning.
 
   social_networks:
     - network: GitHub
@@ -25,13 +25,14 @@ cv:
         position: AI Research Intern
         location: Munich, Germany
         start_date: 2026
-        end_date: 2026
-        summary: Designing a novel self-supervised representation learning framework for 3D CAD (Boundary-Representation) models, built on a Joint-Embedding Predictive Architecture (JEPA).
+        end_date: present
+        summary: Research in Geometric Deep Learning and 3D Vision within the Digital Manufacturing Technologies Research Group — designing a self-supervised representation-learning framework for 3D CAD (BRep) models based on a Joint-Embedding Predictive Architecture (JEPA).
         highlights:
-          - Built a geometry encoder over a geometric Attributed Adjacency Graph, coupling Cross-Scale Mutual Attention with edge-aware Message Passing (Graph Transformer); benchmarked an enhanced Point Transformer v3 point-cloud backbone (Utonia) as an alternative encoder.
-          - Ran an instrumented study isolating what a latent-prediction objective can and cannot force; frozen linear-probe transfer reached 0.71 accuracy (+0.38 over a matched random-init control) in the label-scarce regime (<0.5% labels).
-          - Engineered a geometry-driven module auto-generating PMI (GD&T tolerances & datums) from CAD geometry to automate CMM inspection planning.
-          - Designed the pretraining for few-shot transfer across downstream tasks — automated machining-feature recognition (CAM), part segmentation & classification.
+          - "Built a geometry encoder over a geometric Attributed Adjacency Graph, coupling Cross-Scale Mutual Attention with edge-aware Message Passing (Graph Transformer); benchmarked an enhanced Point Transformer v3 (Utonia) as an alternative encoder."
+          - "Reached **86.1% face accuracy on MFInstSeg with 0.1% of labels** (44 parts), +33.6 points over a matched from-scratch control — on par with the best published results while using a 4.8× smaller encoder and an order of magnitude less pretraining data."
+          - "Ran an instrumented ablation isolating what latent prediction can and cannot force."
+          - "Engineered a geometry-driven module auto-generating PMI (GD&T tolerances & datums) from CAD geometry to automate CMM inspection planning."
+          - "Owned the pipeline end to end — raw CAD data processing, pretraining runs, evaluation protocol, and few-shot / frozen-probe downstream benchmarks (machining-feature recognition, part segmentation & classification)."
 
     Education:
       - institution: PSL Research University
@@ -40,9 +41,9 @@ cv:
         area: Artificial Intelligence, Systems & Data — Mathematics Track
         studyType: MSc IASD
         start_date: 2025
-        end_date: 2026
+        end_date: present
         highlights:
-          - "Research-oriented Master's in Applied Mathematics, Learning, and Modeling."
+          - "Research-oriented Master's in Applied Mathematics, Learning, and Modeling — **ranked 7th** of the cohort."
           - "PSL Research University joint Master's program with ENS Paris, Université Paris-Dauphine & Mines Paris."
           - "**Relevant courses:**"
           - "Foundations of Machine Learning (F. Bach, ENS)"
@@ -61,13 +62,13 @@ cv:
         location: Paris, France
         url: https://www.telecom-paris.fr/en/home
         area: Applied Mathematics and Computer Science
-        studyType: Engineering Degree (M.S.)
+        studyType: Engineering Degree (MSc)
         start_date: 2023
-        end_date: 2026
+        end_date: present
         highlights:
           - "Top-tier French engineering school, leader in the field of digital technology."
-          - "**Stochastic Processes & Scientific Computing:** Martingales · Markov chains · Stochastic Processes (Brownian motion, Poisson process) · High-Dimensional Probability · Statistical Learning · Numerical Analysis (Newton, Monte-Carlo)."
-          - "**Signal Processing & Artificial Intelligence Track:** Statistics · Optimization · Time-Series Analysis · Machine Learning · Deep Learning (CNN, RNN, VAE, GAN, Transformers) · LLM · Audio & Speech Processing · Databases."
+          - "**Signal Processing & Artificial Intelligence Track:** Statistics · Optimization · Time-Series Analysis · Machine Learning · Deep Learning (CNN, RNN, VAE, GAN, Transformers) · LLM · Audio & Speech Processing · Databases. — *Results: 16.4/20*"
+          - "**Stochastic Processes & Scientific Computing:** Martingales · Markov Chains · Stochastic Processes (Brownian motion, Poisson process) · Statistical Learning · Numerical Analysis (Newton, Monte-Carlo). — *Results: 14.4/20*"
 
       - institution: Lycée Condorcet — Preparatory Class for French Grandes Écoles
         location: Paris, France
