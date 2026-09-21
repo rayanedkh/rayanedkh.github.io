@@ -13,18 +13,18 @@ hugoblox:
   # ────────────────────────────────────────────────────────────────────────────
   identity:
     # Site name - shown in navbar, footer, copyright, and browser title by default
-    name: "Your Name"
+    name: "Rayane Dakhlaoui"
     # Legal entity for copyright notices (defaults to name if not set)
     organization: ""
     # Schema.org type for structured data
     type: person                        # person | organization | local_business
     # Short tagline displayed on your site
-    tagline: "Full-Stack Developer"
+    tagline: "Representation Learning · 3D Vision · World Models"
     # Site meta description for search engines and social sharing
-    description: "Modern developer portfolio showcasing web development projects, technical blog posts, and open source contributions. Built with Hugo Blox."
+    description: "Rayane Dakhlaoui is an AI research student at Télécom Paris and the MSc IASD (PSL), working on self-supervised representation learning, 3D vision and world models."
     # Social accounts (used for meta tags like Twitter Cards)
     social:
-      twitter: "yourusername"              # Twitter/X handle for Twitter Cards (without @)
+      twitter: ""                         # Twitter/X handle for Twitter Cards (without @)
 
   # ────────────────────────────────────────────────────────────────────────────
   # THEME
@@ -32,7 +32,7 @@ hugoblox:
   # ────────────────────────────────────────────────────────────────────────────
   theme:
     # Mode: 'light', 'dark', or 'system' (follows OS preference)
-    mode: dark
+    mode: light
     # Theme pack: name from data/themes/ or { light: "x", dark: "y" } for mix-and-match
     pack: "default"
     # Optional: Override theme pack colors
@@ -60,7 +60,7 @@ hugoblox:
   # ────────────────────────────────────────────────────────────────────────────
   typography:
     # Theme pack: name from data/fonts/
-    pack: "developer"
+    pack: "modern"
 
   # ────────────────────────────────────────────────────────────────────────────
   # LAYOUT
@@ -127,7 +127,7 @@ hugoblox:
   # ────────────────────────────────────────────────────────────────────────────
   seo:
     # Browser tab title override (defaults to identity.name if not set)
-    title: ""
+    title: "Rayane Dakhlaoui | AI Research"
     # For local_business identity type only
     location:
       address:
@@ -155,13 +155,13 @@ hugoblox:
   content:
     # Math rendering
     math:
-      enable: false
+      enable: true
     # Table of contents
     toc:
       enable: true
     # Reading time estimates
     reading_time:
-      enable: true
+      enable: false
     # Academic citations (disabled for developer portfolio)
     citations:
       style: apa                        # apa | mla | chicago | ieee

@@ -1,0 +1,59 @@
+{{/* Hugo Blox: About Me */}}
+
+{{ $page := .wcPage }}
+{{ $block := .wcBlock }}
+{{ $content := $block.content }}
+{{ if not (reflect.IsMap $content) }}{{ $content = dict }}{{ end }}
+
+{{ $kicker := strings.TrimSpace (printf "%v" (index $content "kicker")) }}
+{{ $title := strings.TrimSpace (printf "%v" (index $content "title")) }}
+{{ $intro := strings.TrimSpace (printf "%v" (index $content "intro")) }}
+
+{{ $vibes := index $content "vibes" }}
+{{ if not (reflect.IsSlice $vibes) }}{{ $vibes = slice }}{{ end }}
+
+{{ $quoteTitle := strings.TrimSpace (printf "%v" (index $content "quote_title")) }}
+{{ $quote := strings.TrimSpace (printf "%v" (index $content "quote")) }}
+{{ $quoteAuthor := strings.TrimSpace (printf "%v" (index $content "quote_author")) }}
+
+<section class="about-me-glow">
+  <div class="about-me-shell">
+    <div class="about-me-panel">
+      <div class="about-me-top">
+        <div class="about-me-copy">
+          {{ if ne $kicker "" }}<p class="about-me-kicker">{{ $kicker }}</p>{{ end }}
+          {{ if ne $title "" }}<h2 class="about-me-title">{{ $title }}</h2>{{ end }}
+          {{ if ne $intro "" }}<p class="about-me-intro-text">{{ $intro }}</p>{{ end }}
+        </div>
+
+        {{ if ne $quote "" }}
+        <div class="about-me-quote">
+          <div class="quote-orb"></div>
+          {{ if ne $quoteTitle "" }}<p class="quote-label">{{ $quoteTitle }}</p>{{ end }}
+          <p class="quote-mark">“</p>
+          <p class="quote-text">{{ $quote }}</p>
+          {{ if ne $quoteAuthor "" }}<p class="quote-author">{{ $quoteAuthor }}</p>{{ end }}
+        </div>
+        {{ end }}
+      </div>
+
+      {{ if gt (len $vibes) 0 }}
+      <div class="about-me-vibes">
+        {{ range $index, $item := $vibes }}
+          {{ $icon := strings.TrimSpace (printf "%v" (index $item "icon")) }}
+          {{ $label := strings.TrimSpace (printf "%v" (index $item "label")) }}
+          <div class="vibe-item">
+            <div class="vibe-icon-wrap">
+              <span class="vibe-emoji">{{ $icon }}</span>
+            </div>
+            <div class="vibe-text">
+              <span class="vibe-index">{{ printf "%02d" (add $index 1) }}</span>
+              <span class="vibe-label">{{ $label }}</span>
+            </div>
+          </div>
+        {{ end }}
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,47 @@
+{{- if .IsHome -}}
+  {{- $author := index hugo.Data.authors "me" -}}
+  {{- if $author -}}
+    {{- $sameAs := slice -}}
+    {{- range $author.links -}}
+      {{- $url := .url | default "" -}}
+      {{- if hasPrefix $url "http" -}}
+        {{- $sameAs = $sameAs | append $url -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- $person := dict
+      "@context" "https://schema.org"
+      "@type" "Person"
+      "@id" (printf "%s#person" site.BaseURL)
+      "name" "Mohamed Abdelfattah"
+      "alternateName" (slice "Os" "Moo Osama" "Mohamed Osama")
+      "url" site.BaseURL
+      "jobTitle" (slice "AI Research Scientist" "Computer Vision PhD Researcher")
+      "description" site.Params.hugoblox.identity.description
+      "email" "mailto:mohamed.abdelfattah@epfl.ch"
+      "affiliation" (dict
+        "@type" "Organization"
+        "name" "VITA Lab, EPFL"
+        "url" "https://www.epfl.ch/labs/vita/"
+      )
+      "alumniOf" (dict
+        "@type" "CollegeOrUniversity"
+        "name" "The American University in Cairo"
+        "url" "https://www.aucegypt.edu/"
+      )
+      "sameAs" $sameAs
+      "knowsAbout" (slice
+        "Artificial intelligence"
+        "Computer vision"
+        "Multimodal learning"
+        "Egocentric vision"
+        "Self-supervised learning"
+        "Action recognition"
+        "Large language models"
+      )
+    -}}
+    <script type="application/ld+json">
+{{ $person | jsonify (dict "indent" "  ") | safeJS }}
+    </script>
+  {{- end -}}
+{{- end -}}

@@ -1,100 +1,176 @@
 schema: hugoblox/author/v1
 slug: me
 is_owner: true
+avatar: me.gif
 name:
-  display: Alex Johnson
-  given: Alex
-  family: Johnson
+  display: Rayane Dakhlaoui
+  given: Rayane
+  family: Dakhlaoui
 postnominals: []
 status:
-  icon: "💻"  # Emoji shown on avatar badge: 💻 developer, 🎨 designer, 🚀 startup, 🔬 researcher, 🎓 student
-role: Full-Stack Developer
-email: alex@example.com
+  icon: "🔬"
+
+role: "Research Intern @ Siemens | AI & Applied Mathematics | Paris & Munich"
+
+email: rayane.dakhlaoui@telecom-paris.fr
+
 bio: |
-  Full-stack developer with 5+ years of experience building scalable web applications.
-  Passionate about modern JavaScript, cloud architecture, and creating delightful user experiences.
+  <p>Currently a Research Intern in the Siemens Digital Manufacturing Technologies Research Group,
+  I work on Geometric Deep Learning and 3D Vision, developing self-supervised architectures to
+  understand complex industrial 3D models.</p>
+
+  <p>Currently working on Computational Manufacturing: using geometric deep learning to understand the shape of
+  3D CAD parts, especially B-Reps, and turn target geometry into the manufacturing operations needed
+  to produce it.</p>
+
+  <p>I'm a student at <a href="https://www.telecom-paris.fr/">Télécom Paris</a>, one of France's top
+  engineering schools, where I'm pursuing an engineering degree in Applied Mathematics, Signal
+  Processing &amp; Artificial Intelligence. I am also currently enrolled in the
+  <a href="https://www.masteriasd.eu/en/">Master IASD</a> (Artificial Intelligence, Systems, Data,
+  Math Track), a research-oriented master in AI between ENS Paris, Mines Paris, and Université
+  Paris-Dauphine within PSL Research University.</p>
+
+  <p class="ri-label">Research interests</p>
+  <p class="ri-wrap">
+    <a href="#featured-projects" class="ri-chip ri-amber">Self-supervised Learning</a>
+    <a href="#featured-projects" class="ri-chip ri-rose">3D Vision</a>
+    <a href="#featured-projects" class="ri-chip ri-violet">World Modelling</a>
+    <a href="#featured-projects" class="ri-chip ri-blue">Multimodal Learning</a>
+    <a href="#featured-projects" class="ri-chip ri-cyan">Egocentric Vision</a>
+    <a href="#featured-projects" class="ri-chip ri-emerald">Action Recognition</a>
+    <a href="#featured-projects" class="ri-chip ri-teal">Video Understanding</a>
+  </p>
 
 affiliations:
-  - name: Tech Corp
-    url: https://techcorp.example.com
+  - name: Siemens AG
+    url: https://www.siemens.com/
 
 links:
   - icon: at-symbol
-    url: mailto:alex@example.com
-    label: E-mail Me
+    url: mailto:rayane.dakhlaoui@telecom-paris.fr
+    label: Email
   - icon: brands/github
-    url: https://github.com/alexjohnson
+    url: https://github.com/rayanedkh
+    label: GitHub
   - icon: brands/linkedin
-    url: https://www.linkedin.com/in/alexjohnson/
-  - icon: brands/x
-    url: https://x.com/alexjohnson
+    url: https://www.linkedin.com/in/rayane-dakhlaoui/
+    label: LinkedIn
 
 interests:
-  - Web Development
-  - Cloud Architecture
-  - Open Source
-  - Developer Experience
-
-education:
-  - degree: B.S. Computer Science
-    institution: State University
-    start: 2015-09-01
-    end: 2019-05-31
-    summary: |
-      Focus on software engineering and distributed systems.
-      Senior project on distributed caching systems.
-    button:
-      text: View Project
-      url: https://github.com/alexjohnson/senior-project
-      icon: brands/github
+  - Multimodal Learning
+  - Egocentric Vision
+  - Action Recognition
+  - World Modelling
+  - Self-supervised Learning
+  - 3D Vision
+  - Video Understanding
 
 experience:
-  - role: Senior Software Engineer
-    org: Tech Corp
-    start: 2023-01-01
+  - role: AI Research Intern
+    org: Siemens AG, Dept. Foundational Technologies
+    org_url: https://www.siemens.com/
+    org_logo: /media/orgs/siemens.svg
+    location: Munich, Germany
+    start: 2026-04-01
+    end: 2026-09-30
     summary: |
-      Lead development of microservices architecture serving 1M+ users.
-      Improved API response time by 40% through optimization.
-      Mentored team of 5 junior developers.
-  - role: Full-Stack Developer
-    org: Startup Inc
-    start: 2021-06-01
-    end: 2022-12-31
+      - Conducting research in Geometric Deep Learning and 3D Vision within the Digital Manufacturing research group.
+      - Master Thesis: Self-Supervised Representation Learning on 3D CAD Models via JEPA (BRep-JEPA).
+
+education:
+  - degree: M.S. in Artificial Intelligence
+    institution: PSL University, with ENS Paris, Mines Paris and Paris-Dauphine
+    institution_url: https://www.masteriasd.eu/en/
+    institution_logo: /media/orgs/psl.svg
+    location: Paris, France
+    start: 2025-09-01
+    end: 2026-09-30
     summary: |
-      Built and deployed 3 production applications from scratch.
-      Implemented CI/CD pipeline reducing deployment time by 60%.
-      Led migration from monolith to microservices architecture.
-  - role: Junior Developer
-    org: Web Agency
-    start: 2020-01-01
-    end: 2021-05-31
+      - Research-oriented Master's in Applied Mathematics, Learning, and Modeling.
+      - **Key courses:** Reinforcement Learning · Advanced Machine Learning · Advanced Statistics · Deep Learning for Computer Vision · 3D Vision · LLM for Code and Proof · Kernel Methods · Optimal Transport · Representation Learning
+      - **Ranked 7th**
+
+  - degree: M.S. in Applied Mathematics and A.I.
+    institution: Télécom Paris, Institut Polytechnique de Paris
+    institution_url: https://www.telecom-paris.fr/
+    institution_logo: /media/orgs/telecom-paris.svg
+    location: Paris, France
+    start: 2024-09-01
+    end: 2026-06-30
     summary: |
-      Developed client websites using React and modern web technologies.
-      Participated in code reviews and agile ceremonies.
+      - **Artificial Intelligence & Signal Processing:** Machine Learning, Deep Learning (CNN, Transformers, GANs, VAE), Optimization, Statistics (Linear Models), Audio & Speech Processing, Time-Series Analysis.
+      - **Applied Mathematics & Probability:** Martingales, Markov Chains, Stochastic Processes (Brownian Motion, Poisson), Numerical Analysis, Statistical Learning.
+      - **GPA 3.94 / 4.00**
+
+  - degree: B.S. in Mathematics and Computer Science
+    institution: Télécom Paris, Institut Polytechnique de Paris
+    institution_url: https://www.telecom-paris.fr/
+    institution_logo: /media/orgs/telecom-paris.svg
+    location: Paris, France
+    start: 2021-09-01
+    end: 2024-06-30
+    summary: |
+      - A highly selective French Engineering School (Top 5), Télécom Paris is considered to be the leading French school in Computer Science.
+      - Fundamental curriculum in Mathematics, Computer Science and Physics preparing for the Master of Science in Engineering.
+      - **GPA 3.82 / 4.00**
 
 skills:
-  - name: Development
+  - name: Programming
     items:
-      - label: TypeScript
-        level: 5
-      - label: React
-        level: 5
-      - label: Node.js
-        level: 5
       - label: Python
-        level: 4
-  - name: DevOps
-    items:
-      - label: Docker
-        level: 4
-      - label: AWS
-        level: 4
-      - label: CI/CD
         level: 5
+      - label: C
+        level: 3
+      - label: CUDA
+        level: 3
+      - label: SQL
+        level: 3
+  - name: ML and scientific stack
+    items:
+      - label: PyTorch
+        level: 5
+      - label: NumPy / Pandas
+        level: 5
+      - label: scikit-learn
+        level: 4
+      - label: GPU training
+        level: 4
 
 languages:
-  - name: English
+  - name: French
     level: 5
     label: Native
+  - name: English
+    level: 5
+    label: Full professional
+  - name: Arabic
+    level: 3
+    label: Intermediate
+  - name: German
+    level: 1
+    label: Beginner
+
+volunteering:
+  - role: Director of Partnerships
+    org: Télécom Business & Finance
+    org_url: https://telecom-business-finance.com/
+    org_logo: /media/orgs/tbf.png
+    location: Palaiseau, France
+    start: 2024-06-01
+    end: 2025-06-30
+    summary: |
+      - Core member of the association connecting students and professionals in finance, business and entrepreneurship.
+      - Organized educational conferences, ML hackathons and workshops covering hedging, portfolio optimization and algorithmic trading.
+      - Secured strategic partnerships and corporate events with PwC, Onepoint, QRT and InfraVia Capital.
+
+  - role: Corporate Relations Officer
+    org: Forum Télécom Paris
+    org_url: https://forumtelecomparis.fr/
+    org_logo: /media/orgs/forum-telecom.png
+    location: Palaiseau, France
+    start: 2023-11-01
+    end: 2024-11-30
+    summary: |
+      - Sourced, contacted and engaged companies to take part in the Forum Télécom Paris, the school's main recruitment event connecting students with professional opportunities.
 
 awards: []

@@ -1,0 +1,26 @@
+{{/* Inline viewer for an attached document.
+
+     A bare filename refers to a page resource sitting next to index.md, which
+     is how the report, slides and poster PDFs are stored. Anything starting
+     with a slash is served from static/.
+
+     Browsers cannot display a notebook, so the RL notebook is converted to
+     HTML at build time and embedded the same way. */}}
+{{ $src := .Get "src" }}
+{{ $url := $src }}
+{{ if not (or (hasPrefix $src "http") (hasPrefix $src "/")) }}
+  {{ with $.Page.Resources.GetMatch $src }}
+    {{ $url = .RelPermalink }}
+  {{ else }}
+    {{ $url = printf "%s%s" $.Page.RelPermalink $src }}
+  {{ end }}
+{{ end }}
+{{ $label := .Get "label" | default "Document" }}
+{{ $height := .Get "height" | default "720" }}
+<figure class="pk-doc">
+  <iframe src="{{ $url }}" title="{{ $label }}" loading="lazy" style="height: {{ $height }}px;"></iframe>
+  <figcaption>
+    <span>{{ $label }}</span>
+    <a href="{{ $url }}" target="_blank" rel="noopener">Open in a new tab</a>
+  </figcaption>
+</figure>

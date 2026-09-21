@@ -1,0 +1,72 @@
+{{/* Hugo Blox: Resume Awards (local override) */}}
+
+{{ $block := .wcBlock }}
+{{ $content := $block.content }}
+{{ if not (reflect.IsMap $content) }}{{ $content = dict }}{{ end }}
+
+{{ $title := "Awards" }}
+{{ with index $content "title" }}
+  {{ $title = strings.TrimSpace (printf "%v" .) }}
+{{ end }}
+
+{{ $owner := dict }}
+{{ range $key, $author := hugo.Data.authors }}
+  {{ if and (reflect.IsMap $author) (eq (index $author "is_owner") true) }}
+    {{ $owner = $author }}
+  {{ end }}
+{{ end }}
+{{ if and (eq (len $owner) 0) (isset hugo.Data.authors "me") }}
+  {{ $owner = index hugo.Data.authors "me" }}
+{{ end }}
+
+{{ $items := slice }}
+{{ if reflect.IsMap $owner }}
+  {{ $awards := index $owner "awards" }}
+  {{ if reflect.IsSlice $awards }}{{ $items = $awards }}{{ end }}
+{{ end }}
+
+<div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+  <div class="w-full">
+    <h2 class="mb-3 text-3xl font-bold text-gray-900 dark:text-white text-center">{{ $title }}</h2>
+    <p class="mb-10 text-center text-gray-600 dark:text-gray-300">A curated collection of milestones and recognitions.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+      {{ range $idx, $item := $items }}
+        {{ $date := strings.TrimSpace (printf "%v" (index $item "date")) }}
+        {{ $org := strings.TrimSpace (printf "%v" (index $item "org")) }}
+        {{ $summary := strings.TrimSpace (printf "%v" (index $item "summary")) }}
+        {{ $summary_lc := lower $summary }}
+        {{ $accent := "from-sky-50 to-blue-50 dark:from-sky-500/10 dark:to-blue-500/10" }}
+        {{ if eq (mod $idx 4) 1 }}{{ $accent = "from-amber-50 to-orange-50 dark:from-amber-500/10 dark:to-orange-500/10" }}{{ end }}
+        {{ if eq (mod $idx 4) 2 }}{{ $accent = "from-emerald-50 to-teal-50 dark:from-emerald-500/10 dark:to-teal-500/10" }}{{ end }}
+        {{ if eq (mod $idx 4) 3 }}{{ $accent = "from-rose-50 to-fuchsia-50 dark:from-rose-500/10 dark:to-fuchsia-500/10" }}{{ end }}
+
+        <article class="group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-white/[0.08] bg-gradient-to-br {{ $accent }} p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary-500/10">
+          <div class="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/40 dark:bg-white/5 blur-xl"></div>
+
+          <div class="relative mb-4 flex items-start justify-between gap-3">
+            <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 dark:bg-white/10 text-primary-700 dark:text-primary-300">
+              {{ if or (in $summary_lc "ranked") (in $summary_lc "1st") }}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256" class="h-5 w-5"><path d="M232,56H184.49l-9.17-27.52A16,16,0,0,0,160.15,16H95.85A16,16,0,0,0,80.68,28.48L71.51,56H24A8,8,0,0,0,16,64v16a80.09,80.09,0,0,0,64,78.39V184H64a8,8,0,0,0,0,16h48v24H88a8,8,0,0,0,0,16h80a8,8,0,0,0,0-16H144V200h48a8,8,0,0,0,0-16H176V158.39A80.09,80.09,0,0,0,240,80V64A8,8,0,0,0,232,56Z"></path></svg>
+              {{ else if or (in $summary_lc "award") (in $summary_lc "achiever") }}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256" class="h-5 w-5"><path d="M128,16A88,88,0,1,0,216,104,88.1,88.1,0,0,0,128,16Zm0,160a72,72,0,1,1,72-72A72.08,72.08,0,0,1,128,176Zm40,56H88a8,8,0,0,1,0-16h80a8,8,0,0,1,0,16Z"></path></svg>
+              {{ else }}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256" class="h-5 w-5"><path d="M224,56V200a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V56A16,16,0,0,1,48,40H208A16,16,0,0,1,224,56ZM96,112h64a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16Zm0,32h64a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16Z"></path></svg>
+              {{ end }}
+            </span>
+
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-white/80 dark:bg-white/10 px-2.5 py-1 text-xs font-semibold text-gray-700 dark:text-gray-200">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+              {{ $date }}
+            </span>
+          </div>
+
+          <p class="relative text-[1.02rem] leading-relaxed text-gray-800 dark:text-gray-100">{{ $summary }}</p>
+          {{ if ne $org "" }}
+            <p class="relative mt-3 text-sm font-semibold text-primary-700 dark:text-primary-300">{{ $org }}</p>
+          {{ end }}
+        </article>
+      {{ end }}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,133 @@
+{{/* Volunteering. Same presentation as the experience timeline, but reads the
+     `volunteering` list from the author profile instead of `experience`. */}}
+
+{{ $page := .wcPage }}
+{{ $block := .wcBlock }}
+{{ $content := $block.content }}
+{{ if not (reflect.IsMap $content) }}{{ $content = dict }}{{ end }}
+
+{{ $title := "Volunteering" }}
+{{ with index $content "title" }}
+  {{ $title = strings.TrimSpace (printf "%v" .) }}
+{{ end }}
+
+{{ $date_format := "Jan 2006" }}
+{{ with index $content "date_format" }}
+  {{ $candidate := strings.TrimSpace (printf "%v" .) }}
+  {{ if ne $candidate "" }}{{ $date_format = $candidate }}{{ end }}
+{{ end }}
+
+{{ $default_org_logo := "" }}
+
+{{ $owner := dict }}
+{{ range $key, $author := hugo.Data.authors }}
+  {{ if and (reflect.IsMap $author) (eq (index $author "is_owner") true) }}
+    {{ $owner = $author }}
+  {{ end }}
+{{ end }}
+{{ if and (eq (len $owner) 0) (isset hugo.Data.authors "me") }}
+  {{ $owner = index hugo.Data.authors "me" }}
+{{ end }}
+
+{{ $items := slice }}
+{{ if reflect.IsMap $owner }}
+  {{ $exp := index $owner "volunteering" }}
+  {{ if reflect.IsSlice $exp }}{{ $items = $exp }}{{ end }}
+{{ end }}
+
+<div class="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+  <div class="flex flex-col gap-16">
+    <div class="w-full">
+      <h2 class="mb-10 text-3xl font-bold text-gray-900 dark:text-white text-center">{{ $title }}</h2>
+
+      <div class="relative">
+        <div class="absolute left-4 sm:left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-500 via-primary-400 to-primary-600/50"></div>
+
+        <div class="space-y-8">
+          {{ range $items }}
+            {{ $role := strings.TrimSpace (printf "%v" (index . "role")) }}
+            {{ $org := strings.TrimSpace (printf "%v" (index . "org")) }}
+            {{ $org_url := strings.TrimSpace (printf "%v" (index . "org_url")) }}
+            {{ $location := strings.TrimSpace (printf "%v" (index . "location")) }}
+            {{ $summary := strings.TrimSpace (printf "%v" (index . "summary")) }}
+            {{ $org_logo := $default_org_logo }}
+            {{ with index . "org_logo" }}
+              {{ $candidate_logo := strings.TrimSpace (printf "%v" .) }}
+              {{ if ne $candidate_logo "" }}{{ $org_logo = $candidate_logo }}{{ end }}
+            {{ end }}
+
+            {{ $start_display := "" }}
+            {{ with index . "start" }}
+              {{ $start_display = time.Format $date_format (time.AsTime (printf "%v" .)) }}
+            {{ end }}
+
+            {{ $end_display := "Present" }}
+            {{ $end_expected := false }}
+            {{ with index . "end" }}
+              {{ $end_display = time.Format $date_format (time.AsTime (printf "%v" .)) }}
+            {{ end }}
+            {{ with index . "end_offset_months" }}
+              {{ $end_display = time.Format $date_format (now.AddDate 0 (int .) 0) }}
+            {{ end }}
+            {{ with index . "end_expected" }}
+              {{ if . }}{{ $end_expected = true }}{{ end }}
+            {{ end }}
+
+            <div class="group relative pl-12 sm:pl-16">
+              <div class="absolute left-0 sm:left-2 top-6 flex items-center justify-center">
+                <div class="relative">
+                  <div class="absolute inset-0 w-8 h-8 bg-primary-500/30 rounded-full blur-md group-hover:bg-primary-500/50 transition-all duration-300"></div>
+                  <div class="relative w-8 h-8 bg-white dark:bg-gray-900 border-2 border-primary-500 rounded-full flex items-center justify-center group-hover:border-primary-400 group-hover:scale-110 transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256" class="w-4 h-4 text-primary-600 dark:text-primary-400"><path d="M216,56H176V48a24,24,0,0,0-24-24H104A24,24,0,0,0,80,48v8H40A16,16,0,0,0,24,72V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V72A16,16,0,0,0,216,56ZM96,48a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96ZM216,72v41.61A184,184,0,0,1,128,136a184.07,184.07,0,0,1-88-22.38V72Zm0,128H40V131.64A200.19,200.19,0,0,0,128,152a200.25,200.25,0,0,0,88-20.37V200ZM104,112a8,8,0,0,1,8-8h32a8,8,0,0,1,0,16H112A8,8,0,0,1,104,112Z"></path></svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relative bg-white dark:bg-white/[0.02] backdrop-blur-sm rounded-xl border border-gray-200 dark:border-white/[0.06] p-6 hover:bg-gray-50 dark:hover:bg-white/[0.04] hover:border-primary-300 dark:hover:border-primary-500/30 transition-all duration-300 group-hover:translate-x-1 shadow-sm dark:shadow-none">
+                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+                  <div class="min-w-0 flex items-start gap-3">
+                    <span class="inline-flex items-center justify-center w-12 h-12 shrink-0">
+                      <img src="{{ $org_logo }}" alt="{{ $org }} logo" class="w-10 h-10 object-contain" loading="lazy" decoding="async">
+                    </span>
+                    <div>
+                      <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors leading-snug">{{ $role }}</h3>
+                      <p class="text-primary-600 dark:text-primary-400 font-medium mt-1">
+                        {{ if ne $org_url "" }}
+                          <a href="{{ $org_url }}" target="_blank" rel="noopener" class="no-underline hover:text-primary-700 dark:hover:text-primary-300 transition-colors">{{ $org }}</a>
+                        {{ else }}
+                          {{ $org }}
+                        {{ end }}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col gap-1.5 text-sm text-gray-500 dark:text-gray-400 shrink-0 sm:min-w-[220px] sm:items-start">
+                    <div class="flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <time>{{ $start_display }} → {{ $end_display }}{{ if $end_expected }} (Expected){{ end }}</time>
+                    </div>
+                    {{ if ne $location "" }}
+                      <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>{{ $location }}</span>
+                      </div>
+                    {{ end }}
+                  </div>
+                </div>
+
+                {{ if ne $summary "" }}
+                  <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400 leading-relaxed prose-a:text-primary-600 dark:prose-a:text-primary-400 prose-a:font-medium prose-a:no-underline hover:prose-a:no-underline prose-a:hover:text-primary-700 dark:prose-a:hover:text-primary-300">{{ $summary | markdownify }}</div>
+                {{ end }}
+              </div>
+            </div>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

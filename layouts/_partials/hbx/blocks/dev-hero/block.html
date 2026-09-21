@@ -1,0 +1,208 @@
+{{/* Hugo Blox: Developer Hero (local override) */}}
+
+{{ $page := .wcPage }}
+{{ $block := .wcBlock }}
+{{ $content := $block.content }}
+{{ if not (reflect.IsMap $content) }}{{ $content = dict }}{{ end }}
+
+{{ $design := $block.design }}
+{{ if not (reflect.IsMap $design) }}{{ $design = dict }}{{ end }}
+{{ $background := index $design "background" }}
+{{ if not (reflect.IsMap $background) }}{{ $background = dict }}{{ end }}
+{{ $background_color := index $background "color" }}
+{{ if not (reflect.IsMap $background_color) }}{{ $background_color = dict }}{{ end }}
+{{ $bg_light := "#fafafa" }}
+{{ $bg_dark := "#0a0a0f" }}
+{{ with index $background_color "light" }}
+  {{ $candidate := strings.TrimSpace (printf "%v" .) }}
+  {{ if ne $candidate "" }}{{ $bg_light = $candidate }}{{ end }}
+{{ end }}
+{{ with index $background_color "dark" }}
+  {{ $candidate := strings.TrimSpace (printf "%v" .) }}
+  {{ if ne $candidate "" }}{{ $bg_dark = $candidate }}{{ end }}
+{{ end }}
+
+{{ $username := "me" }}
+{{ with index $content "username" }}
+  {{ $candidate := strings.TrimSpace (printf "%v" .) }}
+  {{ if ne $candidate "" }}{{ $username = $candidate }}{{ end }}
+{{ end }}
+
+{{ $author := dict }}
+{{ if isset hugo.Data.authors $username }}
+  {{ $author = index hugo.Data.authors $username }}
+{{ end }}
+{{ if and (eq (len $author) 0) (isset hugo.Data.authors "me") }}
+  {{ $author = index hugo.Data.authors "me" }}
+{{ end }}
+{{ $author_profile := partial "functions/get_author_profile" $username }}
+
+{{ $name := "Your Name" }}
+{{ with index $author "name" }}
+  {{ if reflect.IsMap . }}
+    {{ with index . "display" }}{{ $name = strings.TrimSpace (printf "%v" .) }}{{ end }}
+  {{ else }}
+    {{ $name = strings.TrimSpace (printf "%v" .) }}
+  {{ end }}
+{{ end }}
+
+{{ $greeting := "Call me Os" }}
+{{ with index $content "greeting" }}
+  {{ $candidate := strings.TrimSpace (printf "%v" .) }}
+  {{ if ne $candidate "" }}{{ $greeting = $candidate }}{{ end }}
+{{ end }}
+
+{{ $status_icon := "🤖" }}
+{{ with index $author "status" }}
+  {{ if reflect.IsMap . }}
+    {{ with index . "icon" }}
+      {{ $candidate := strings.TrimSpace (printf "%v" .) }}
+      {{ if ne $candidate "" }}{{ $status_icon = $candidate }}{{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ $role := strings.TrimSpace (printf "%v" (index $author "role")) }}
+{{ $bio := strings.TrimSpace (printf "%v" (index $author "bio")) }}
+
+{{ $avatar := $author_profile.avatar }}
+{{ $avatar_url := printf "/media/authors/%s.png" $username }}
+{{ if $avatar }}{{ $avatar_url = $avatar.RelPermalink }}{{ end }}
+
+{{ $buttons := slice }}
+{{ $buttons_raw := index $content "cta_buttons" }}
+{{ if reflect.IsSlice $buttons_raw }}
+  {{ $buttons = $buttons_raw }}
+{{ end }}
+
+{{ $links := slice }}
+{{ $links_raw := index $author "links" }}
+{{ if reflect.IsSlice $links_raw }}
+  {{ $links = $links_raw }}
+{{ end }}
+
+{{ $show_scroll_indicator := false }}
+{{ with index $content "show_scroll_indicator" }}
+  {{ if eq (printf "%T" .) "bool" }}{{ $show_scroll_indicator = . }}{{ end }}
+{{ end }}
+
+{{ $image_side := "left" }}
+{{ with index $content "image_side" }}
+  {{ $candidate := lower (strings.TrimSpace (printf "%v" .)) }}
+  {{ if or (eq $candidate "left") (eq $candidate "right") }}{{ $image_side = $candidate }}{{ end }}
+{{ end }}
+
+<section class="dev-hero-surface relative" style="--hero-bg-light: {{ $bg_light }}; --hero-bg-dark: {{ $bg_dark }};">
+  <style>
+    .dev-hero-surface {
+      background-color: var(--hero-bg-light);
+    }
+    .dark .dev-hero-surface {
+      background-color: var(--hero-bg-dark);
+    }
+  </style>
+
+  {{/* Original-style Dev Hero background atmosphere */}}
+  <div class="absolute inset-0 pointer-events-none dark:block hidden">
+    <div class="absolute top-1/4 -left-20 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-1/4 -right-20 w-80 h-80 bg-secondary-500/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-primary-600/5 rounded-full blur-3xl"></div>
+    <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+  </div>
+
+  <div class="absolute inset-0 pointer-events-none dark:hidden">
+    <div class="absolute top-1/4 -left-20 w-96 h-96 bg-primary-100 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-1/4 -right-20 w-80 h-80 bg-secondary-100 rounded-full blur-3xl"></div>
+  </div>
+
+{{/* LOCAL LAYOUT: one centred column, avatar inline to the left of the name. */}}
+<div class="mx-auto max-w-3xl px-4 sm:px-6 py-12 sm:py-16">
+  <div class="relative z-10">
+    <header class="hero-head">
+      <img src="{{ $avatar_url }}" alt="" class="hero-avatar" loading="eager" decoding="async">
+      <div class="hero-head__text">
+        <p class="mb-1 text-xs tracking-[0.14em] uppercase font-semibold text-slate-500 dark:text-slate-400">{{ $greeting }}</p>
+        <h1 class="text-4xl sm:text-5xl font-bold leading-tight mb-2">
+          <span class="bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 dark:from-white dark:via-slate-100 dark:to-slate-300 bg-clip-text text-transparent">{{ $name }}</span>
+        </h1>
+        {{ if ne $role "" }}
+          <div class="text-slate-600 dark:text-slate-300 text-[1.02rem] leading-relaxed">{{ $role | safeHTML }}</div>
+        {{ end }}
+      </div>
+    </header>
+
+    <div class="text-left">
+
+      {{ if ne $bio "" }}
+        <div class="hero-bio text-left mb-7 max-w-3xl mx-auto lg:mx-0">{{ $bio | safeHTML }}</div>
+      {{ end }}
+
+      {{ if gt (len $buttons) 0 }}
+        <div class="flex flex-wrap items-center justify-start gap-3 mb-7">
+          {{ range $buttons }}
+            {{ if reflect.IsMap . }}
+              {{ $text := strings.TrimSpace (printf "%v" (index . "text")) }}
+              {{ $url := strings.TrimSpace (printf "%v" (index . "url")) }}
+              {{ $icon := strings.TrimSpace (printf "%v" (index . "icon")) }}
+              {{ $new_tab := partial "functions/coerce_bool" (dict "value" (index . "new_tab") "default" false) }}
+              {{ if and (ne $text "") (ne $url "") }}
+                {{ $link := $url }}
+                {{ $target := "" }}
+                {{ $scheme := (urls.Parse $link).Scheme }}
+                {{ if not $scheme }}
+                  {{ if not (hasPrefix $link "#") }}
+                    {{ $link = $link | relLangURL }}
+                  {{ end }}
+                  {{ if eq (path.Ext $link) ".pdf" }}{{ $new_tab = true }}{{ end }}
+                {{ else if in (slice "http" "https") $scheme }}
+                  {{ $new_tab = true }}
+                {{ end }}
+                {{ if $new_tab }}
+                  {{ $target = "target=\"_blank\" rel=\"noopener\"" }}
+                {{ end }}
+                <a href="{{ $link | safeURL }}" {{ $target | safeHTMLAttr }} class="inline-flex items-center gap-2 rounded-full border border-slate-300 dark:border-white/15 bg-white/90 dark:bg-white/[0.04] px-5 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:border-sky-300 dark:hover:border-sky-400/50 hover:text-sky-700 dark:hover:text-sky-300 transition-all duration-300">
+                  {{ if ne $icon "" }}{{ partial "functions/get_icon" (dict "name" $icon "attributes" "class=\"w-4 h-4\"") }}{{ end }}
+                  <span>{{ $text }}</span>
+                </a>
+              {{ end }}
+            {{ end }}
+          {{ end }}
+        </div>
+      {{ end }}
+
+      {{ if gt (len $links) 0 }}
+        <div class="flex flex-wrap items-center justify-start gap-3">
+          {{ range $links }}
+            {{ if reflect.IsMap . }}
+              {{ $icon := strings.TrimSpace (printf "%v" (index . "icon")) }}
+              {{ $url := strings.TrimSpace (printf "%v" (index . "url")) }}
+              {{ $label := strings.TrimSpace (printf "%v" (index . "label")) }}
+              {{ if eq $label "" }}
+                {{ if eq $icon "at-symbol" }}{{ $label = "Email" }}{{ end }}
+                {{ if eq $icon "brands/github" }}{{ $label = "GitHub" }}{{ end }}
+                {{ if eq $icon "brands/linkedin" }}{{ $label = "LinkedIn" }}{{ end }}
+                {{ if eq $icon "brands/google-scholar" }}{{ $label = "Google Scholar" }}{{ end }}
+              {{ end }}
+              {{ if and (ne $icon "") (ne $url "") }}
+                <a href="{{ $url }}" {{ if hasPrefix $url "http" }}target="_blank" rel="noopener noreferrer"{{ end }} class="inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/[0.04] px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-sky-700 dark:hover:text-sky-300 hover:border-sky-300 dark:hover:border-sky-400/50 transition-all duration-300" title="{{ $label | default $icon }}">
+                  {{ partial "functions/get_icon" (dict "name" $icon "attributes" "class=\"w-4 h-4\"") }}
+                  {{ if ne $label "" }}<span>{{ $label }}</span>{{ end }}
+                </a>
+              {{ end }}
+            {{ end }}
+          {{ end }}
+        </div>
+      {{ end }}
+    </div>
+  </div>
+
+  {{ if $show_scroll_indicator }}
+    <div class="mt-10 text-center">
+      <a href="#all-publications" class="inline-flex flex-col items-center text-slate-500 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors">
+        <span class="text-xs uppercase tracking-[0.12em] mb-1">Scroll</span>
+        {{ partial "functions/get_icon" (dict "name" "chevron-down" "attributes" "class=\"w-5 h-5 animate-bounce\"") }}
+      </a>
+    </div>
+  {{ end }}
+</div>
+</section>

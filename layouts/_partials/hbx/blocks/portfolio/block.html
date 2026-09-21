@@ -1,0 +1,640 @@
+{{/* Hugo Blox: Portfolio */}}
+{{/* Documentation: https://hugoblox.com/blocks/ */}}
+{{/* License: https://github.com/HugoBlox/kit/blob/main/LICENSE.md */}}
+
+{{/* Initialise */}}
+{{ $page := .wcPage }}
+{{ $block := .wcBlock }}
+{{ $content := $block.content }}
+{{ if not (reflect.IsMap $content) }}{{ $content = dict }}{{ end }}
+{{ $design := $block.design }}
+{{ if not (reflect.IsMap $design) }}{{ $design = dict }}{{ end }}
+
+{{/* Enable Alpine.js and animations for this block */}}
+{{ $page.Store.Set "has_alpine" true }}
+{{ $animations_enabled := true }}
+{{ if isset $design "animations" }}
+  {{ $animations_enabled = partial "functions/coerce_bool" (dict "value" (index $design "animations") "default" true) }}
+{{ end }}
+{{ if $animations_enabled }}
+  {{ $page.Store.Set "has_animations" true }}
+{{ end }}
+
+{{/* Query projects */}}
+{{ $query := site.Pages }}
+{{ $filters := index $content "filters" }}
+{{ if not (reflect.IsMap $filters) }}{{ $filters = dict }}{{ end }}
+{{ $folders_raw := index $filters "folders" }}
+{{ $folders := slice }}
+{{ if reflect.IsSlice $folders_raw }}
+  {{ range $folders_raw }}
+    {{ $folder := strings.TrimSpace (printf "%v" .) }}
+    {{ if $folder }}{{ $folders = $folders | append $folder }}{{ end }}
+  {{ end }}
+{{ else if eq (printf "%T" $folders_raw) "string" }}
+  {{ $folder := strings.TrimSpace $folders_raw }}
+  {{ if $folder }}{{ $folders = slice $folder }}{{ end }}
+{{ end }}
+{{ if eq (len $folders) 0 }}{{ $folders = slice "projects" }}{{ end }}
+{{ $query = where $query "Section" "in" $folders }}
+{{ $query = where $query "Kind" "eq" "page" }}
+{{ $featured_only := partial "functions/coerce_bool" (dict "value" (index $content "featured_only") "default" false) }}
+{{ if $featured_only }}
+  {{ $query = where $query "Params.featured" true }}
+{{ end }}
+
+{{/* Get archive page for "View All" link */}}
+{{ $archive_page := "" }}
+{{ $main_folder := index $folders 0 }}
+{{ $archive_page = site.GetPage "Section" $main_folder }}
+
+{{/* Sort */}}
+{{ $sort_by := "Date" }}
+{{ $sort_by_raw := index $content "sort_by" }}
+{{ if eq (printf "%T" $sort_by_raw) "string" }}
+  {{ $sort_by_raw = strings.TrimSpace $sort_by_raw }}
+  {{ if ne $sort_by_raw "" }}{{ $sort_by = $sort_by_raw }}{{ end }}
+{{ end }}
+{{ $sort_by = partial "functions/get_sort_by_parameter" $sort_by }}
+{{ $sort_ascending := partial "functions/coerce_bool" (dict "value" (index $content "sort_ascending") "default" false) }}
+{{ $sort_order := cond $sort_ascending "asc" "desc" }}
+{{ $query = sort $query $sort_by $sort_order }}
+{{ $all_items := $query }}
+
+{{/* Get filter buttons */}}
+{{ $buttons_raw := index $content "buttons" }}
+{{ $buttons := slice }}
+{{ if reflect.IsSlice $buttons_raw }}
+  {{ $buttons = $buttons_raw }}
+{{ else if and $buttons_raw (reflect.IsMap $buttons_raw) }}
+  {{ $buttons = slice $buttons_raw }}
+{{ end }}
+{{ if eq (len $buttons) 0 }}
+  {{ $buttons = slice (dict "name" "All" "tag" "*") }}
+{{ end }}
+{{ $default_idx := partial "functions/coerce_int" (dict "value" (index $content "default_button_index") "default" 0 "min" 0) }}
+{{ $default_tag := "*" }}
+{{ if lt $default_idx (len $buttons) }}
+  {{ with index $buttons $default_idx }}
+    {{ if reflect.IsMap . }}
+      {{ with index . "tag" }}{{ $default_tag = strings.TrimSpace (printf "%v" .) }}{{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+{{ if eq $default_tag "" }}{{ $default_tag = "*" }}{{ end }}
+
+{{/* Status configuration */}}
+{{ $status_content := index $content "status" }}
+{{ if not (reflect.IsMap $status_content) }}{{ $status_content = dict }}{{ end }}
+{{ $status_text_override := "" }}
+{{ with index $status_content "text" }}
+  {{ if eq (printf "%T" .) "string" }}{{ $status_text_override = strings.TrimSpace (printf "%v" .) }}{{ end }}
+{{ end }}
+{{ $status_design := index $design "status_badge" }}
+{{ if not (reflect.IsMap $status_design) }}{{ $status_design = dict }}{{ end }}
+{{ $show_status_badge := partial "functions/coerce_bool" (dict "value" (index $status_design "enable") "default" true) }}
+
+{{/* Store total count before limiting */}}
+{{ $total_count := len $all_items }}
+
+{{/* Limit per filter while keeping per-button visibility accurate */}}
+{{ $count := partial "functions/coerce_int" (dict "value" (index $content "count") "default" 0 "min" 0) }}
+{{ $button_items := dict }}
+{{ $allowed_map := dict }}
+
+{{ range $buttons }}
+  {{ if reflect.IsMap . }}
+    {{ $tag := "*" }}
+    {{ with index . "tag" }}{{ $tag = strings.TrimSpace (printf "%v" .) }}{{ end }}
+    {{ if eq $tag "" }}{{ $tag = "*" }}{{ end }}
+    {{ $tag_key := lower $tag }}
+    {{ $items := slice }}
+    {{ if le $count 0 }}
+      {{ if eq $tag_key "*" }}
+        {{ $items = $all_items }}
+      {{ else }}
+        {{ $items = where $all_items "Params.tags" "intersect" (slice $tag_key) }}
+        {{ if eq (len $items) 0 }}
+          {{ $items = where $all_items "Params.tags" "intersect" (slice $tag) }}
+        {{ end }}
+      {{ end }}
+    {{ else }}
+      {{ if eq $tag_key "*" }}
+        {{ $items = first $count $all_items }}
+      {{ else }}
+        {{ $items = first $count (where $all_items "Params.tags" "intersect" (slice $tag_key)) }}
+        {{ if eq (len $items) 0 }}
+          {{ $items = first $count (where $all_items "Params.tags" "intersect" (slice $tag)) }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+    {{ $button_items = merge $button_items (dict $tag_key $items) }}
+
+    {{ range $items }}
+      {{ $key := .RelPermalink }}
+      {{ $allowed := slice }}
+      {{ with index $allowed_map $key }}{{ $allowed = . }}{{ end }}
+      {{ if not (in $allowed $tag) }}
+        {{ $allowed = $allowed | append $tag }}
+      {{ end }}
+      {{ $allowed_map = merge $allowed_map (dict $key $allowed) }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{/* Build render list in sorted order, only keeping items that belong to a filter */}}
+{{ $render_items := slice }}
+{{ range $all_items }}
+  {{ if isset $allowed_map .RelPermalink }}
+    {{ $render_items = $render_items | append . }}
+  {{ end }}
+{{ end }}
+
+{{/* Fallback to all items if something went wrong */}}
+{{ if eq (len $render_items) 0 }}
+  {{ $render_items = $all_items }}
+  {{ range $render_items }}
+    {{ $allowed_map = merge $allowed_map (dict .RelPermalink (slice "*")) }}
+  {{ end }}
+{{ end }}
+
+{{ $query = $render_items }}
+{{ $default_items := index $button_items (lower $default_tag) | default (slice) }}
+{{ $displayed_count := len $default_items }}
+
+{{/* Columns */}}
+{{ $columns := partial "functions/coerce_int" (dict "value" (index $design "columns") "default" 3 "min" 1 "max" 4) }}
+{{ $grid_class := "md:grid-cols-2 lg:grid-cols-3" }}
+{{ if eq $columns 2 }}
+  {{ $grid_class = "md:grid-cols-2" }}
+{{ else if eq $columns 4 }}
+  {{ $grid_class = "md:grid-cols-2 lg:grid-cols-4" }}
+{{ end }}
+
+{{ $fallback_icon := "code-bracket" }}
+{{ $fallback_raw := index $design "fallback_icon" }}
+{{ if eq (printf "%T" $fallback_raw) "string" }}
+  {{ $fallback_icon = $fallback_raw }}
+{{ end }}
+
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16" x-data="{ activeFilter: {{ $default_tag | jsonify }} }">
+  
+  {{/* Header */}}
+  <div class="text-center mb-12">
+    {{ with index $content "title" }}
+    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+      {{ printf "%v" . | emojify | $page.RenderString }}
+    </h2>
+    {{ end }}
+    {{ with index $content "subtitle" }}
+    <p class="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+      {{ printf "%v" . | emojify | $page.RenderString }}
+    </p>
+    {{ end }}
+  </div>
+
+  {{/* Filter Buttons */}}
+  {{ if gt (len $buttons) 1 }}
+  <div class="flex flex-wrap justify-center gap-2 mb-10">
+    {{ range $idx, $button := $buttons }}
+    {{ if reflect.IsMap $button }}
+    {{ $button_name := "" }}
+    {{ with index $button "name" }}{{ $button_name = strings.TrimSpace (printf "%v" .) }}{{ end }}
+    {{ $button_tag := "*" }}
+    {{ with index $button "tag" }}{{ $button_tag = strings.TrimSpace (printf "%v" .) }}{{ end }}
+    {{ $active_class := "bg-slate-700 text-white border-slate-700 shadow-md shadow-slate-700/20" }}
+    {{ $inactive_class := "bg-slate-50 dark:bg-slate-900/40 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:border-slate-300 dark:hover:border-slate-600" }}
+    {{ if eq $button_tag "Multimodal Learning" }}
+      {{ $active_class = "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-600/25" }}
+      {{ $inactive_class = "bg-blue-50 dark:bg-blue-500/12 text-blue-700 dark:text-blue-200 border-blue-200 dark:border-blue-400/28 hover:bg-blue-100 dark:hover:bg-blue-500/20 hover:border-blue-300 dark:hover:border-blue-300/45" }}
+    {{ else if eq $button_tag "Egocentric Vision" }}
+      {{ $active_class = "bg-cyan-600 text-white border-cyan-600 shadow-md shadow-cyan-600/25" }}
+      {{ $inactive_class = "bg-cyan-50 dark:bg-cyan-500/12 text-cyan-700 dark:text-cyan-200 border-cyan-200 dark:border-cyan-400/28 hover:bg-cyan-100 dark:hover:bg-cyan-500/20 hover:border-cyan-300 dark:hover:border-cyan-300/45" }}
+    {{ else if eq $button_tag "Action Recognition" }}
+      {{ $active_class = "bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-600/25" }}
+      {{ $inactive_class = "bg-emerald-50 dark:bg-emerald-500/12 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/28 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 hover:border-emerald-300 dark:hover:border-emerald-300/45" }}
+    {{ else if eq $button_tag "World Modelling" }}
+      {{ $active_class = "bg-violet-600 text-white border-violet-600 shadow-md shadow-violet-600/25" }}
+      {{ $inactive_class = "bg-violet-50 dark:bg-violet-500/12 text-violet-700 dark:text-violet-200 border-violet-200 dark:border-violet-400/28 hover:bg-violet-100 dark:hover:bg-violet-500/20 hover:border-violet-300 dark:hover:border-violet-300/45" }}
+    {{ else if eq $button_tag "Self-supervised Learning" }}
+      {{ $active_class = "bg-amber-600 text-white border-amber-600 shadow-md shadow-amber-600/25" }}
+      {{ $inactive_class = "bg-amber-50 dark:bg-amber-500/12 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-400/28 hover:bg-amber-100 dark:hover:bg-amber-500/20 hover:border-amber-300 dark:hover:border-amber-300/45" }}
+    {{ else if eq $button_tag "LLMs" }}
+      {{ $active_class = "bg-rose-600 text-white border-rose-600 shadow-md shadow-rose-600/25" }}
+      {{ $inactive_class = "bg-rose-50 dark:bg-rose-500/12 text-rose-700 dark:text-rose-200 border-rose-200 dark:border-rose-400/28 hover:bg-rose-100 dark:hover:bg-rose-500/20 hover:border-rose-300 dark:hover:border-rose-300/45" }}
+    {{ else if eq $button_tag "Datasets" }}
+      {{ $active_class = "bg-blue-500 text-white border-blue-500 shadow-md" }}
+      {{ $inactive_class = "bg-orange-50 dark:bg-orange-500/12 text-orange-700 dark:text-orange-200 border-orange-200 dark:border-orange-400/28 hover:bg-orange-100 dark:hover:bg-orange-500/20 hover:border-orange-300 dark:hover:border-orange-300/45" }}
+    {{ else if eq $button_tag "Semantic Segmentation" }}
+      {{ $active_class = "bg-cyan-500 text-white border-cyan-500 shadow-md" }}
+      {{ $inactive_class = "bg-lime-50 dark:bg-lime-500/12 text-lime-700 dark:text-lime-200 border-lime-200 dark:border-lime-400/28 hover:bg-lime-100 dark:hover:bg-lime-500/20 hover:border-lime-300 dark:hover:border-lime-300/45" }}
+    {{ else if eq $button_tag "Pose Estimation" }}
+      {{ $active_class = "bg-emerald-500 text-white border-emerald-500 shadow-md" }}
+      {{ $inactive_class = "bg-indigo-50 dark:bg-indigo-500/12 text-indigo-700 dark:text-indigo-200 border-indigo-200 dark:border-indigo-400/28 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 hover:border-indigo-300 dark:hover:border-indigo-300/45" }}
+    {{ end }}
+    <button 
+      @click="activeFilter = {{ $button_tag | jsonify }}"
+      :class="activeFilter === {{ $button_tag | jsonify }} 
+        ? '{{ $active_class }}' 
+        : '{{ $inactive_class }}'"
+      class="px-5 py-2.5 rounded-full text-sm font-medium border backdrop-blur-sm transition-all duration-300 ease-out cursor-pointer"
+    >
+      {{ $button_name | default "All" }}
+    </button>
+    {{ end }}
+    {{ end }}
+  </div>
+  {{ end }}
+
+  {{/* Project Grid with staggered reveal animation */}}
+  <div class="grid grid-cols-1 {{ $grid_class }} gap-6" data-stagger="100">
+    {{ range $index, $item := $query }}
+      {{ $item_key := $item.RelPermalink }}
+      {{ $card_allowed_filters := index $allowed_map $item_key }}
+      {{ if not $card_allowed_filters }}{{ $card_allowed_filters = slice "*" }}{{ end }}
+      {{ $card_allowed_filters_json := $card_allowed_filters | jsonify }}
+
+      {{/* Get tags as comma-separated string */}}
+      {{ $tags := slice }}
+      {{ $tags_raw := $item.Params.tags }}
+      {{ if reflect.IsSlice $tags_raw }}
+        {{ range $tags_raw }}
+          {{ $tag := strings.TrimSpace (printf "%v" .) }}
+          {{ if $tag }}{{ $tags = $tags | append $tag }}{{ end }}
+        {{ end }}
+      {{ else if eq (printf "%T" $tags_raw) "string" }}
+        {{ $tag_string := strings.TrimSpace $tags_raw }}
+        {{ if $tag_string }}
+          {{ if strings.Contains $tag_string "," }}
+            {{ range (split $tag_string ",") }}
+              {{ $tag := strings.TrimSpace . }}
+              {{ if $tag }}{{ $tags = $tags | append $tag }}{{ end }}
+            {{ end }}
+          {{ else }}
+            {{ $tags = slice $tag_string }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+      
+      {{/* Get status */}}
+      {{ $status := "" }}
+      {{ $status_raw := $item.Params.status }}
+      {{ if eq (printf "%T" $status_raw) "string" }}
+        {{ $status = strings.TrimSpace $status_raw }}
+      {{ end }}
+      {{ $status_display := $status }}
+      {{ if ne $status_text_override "" }}
+        {{ $status_display = $status_text_override }}
+      {{ end }}
+      {{ $status_color_source := cond (ne $status "" ) $status $status_display }}
+      {{ $status_norm := upper $status_color_source }}
+      {{ $status_class := "bg-emerald-600 text-white border-emerald-500 shadow-md shadow-emerald-500/30 dark:bg-emerald-500 dark:border-emerald-400" }}
+      {{ if eq $status_norm "WIP" }}
+        {{ $status_class = "bg-amber-500 text-white border-amber-400 shadow-md shadow-amber-400/30 dark:bg-amber-500" }}
+      {{ else if eq $status_norm "ARCHIVED" }}
+        {{ $status_class = "bg-gray-600 text-white border-gray-500 shadow-md shadow-gray-500/30 dark:bg-gray-500" }}
+      {{ end }}
+      {{ $render_status_badge := and $show_status_badge (ne $status_display "") }}
+
+      <article 
+        x-data="{ filters: {{ $card_allowed_filters_json }} }"
+        x-show="filters.includes(activeFilter)"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95"
+        class="group relative flex flex-col bg-white dark:bg-white/[0.03] backdrop-blur-xl rounded-2xl border border-gray-200 dark:border-white/[0.08] overflow-hidden hover:border-primary-500/50 hover:bg-gray-50 dark:hover:bg-white/[0.06] transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 card-hover-lift"
+      >
+        {{/* Card Header / Image */}}
+        <div class="relative h-48 overflow-hidden">
+          {{ $image := $item.Resources.GetMatch "{featured,cover,thumbnail}*" }}
+          {{ if $image }}
+            {{ if strings.Contains $image.MediaType.SubType "svg" }}
+              <img 
+                src="{{ $image.RelPermalink }}" 
+                alt="{{ $item.Title }}"
+                class="w-full h-full object-contain bg-gray-100 dark:bg-white/5 transition-transform duration-500 group-hover:scale-105"
+              >
+            {{ else }}
+              {{ $img := $image.Fit "600x400 webp" }}
+              <img 
+                src="{{ $img.RelPermalink }}" 
+                alt="{{ $item.Title }}"
+                class="w-full h-full object-contain bg-gray-100 dark:bg-white/5 transition-transform duration-500 group-hover:scale-105"
+              >
+            {{ end }}
+          {{ else }}
+            {{/* Gradient placeholder with configurable icon */}}
+            <div class="w-full h-full bg-gradient-to-br from-primary-600/40 via-secondary-600/30 to-primary-800/50 flex items-center justify-center">
+              {{ partial "functions/get_icon" (dict "name" $fallback_icon "attributes" "class=\"w-16 h-16 text-white/30\"") }}
+            </div>
+          {{ end }}
+          
+          {{/* Status Badge */}}
+          {{ if $render_status_badge }}
+          <div class="absolute top-3 right-3">
+            <span class="px-2.5 py-1.5 text-xs font-semibold rounded-full border {{ $status_class }}">
+              {{ $status_display }}
+            </span>
+          </div>
+          {{ end }}
+          
+          {{/* Gradient Overlay */}}
+          <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/20 to-transparent"></div>
+        </div>
+
+        {{/* Card Content - use flex-col to push links to bottom */}}
+        <div class="p-5 flex flex-col flex-grow">
+          {{ $card_link := $item.RelPermalink }}
+          {{ $card_target := "" }}
+          {{ with $item.Params.external_link }}
+            {{ $card_link = strings.TrimSpace (printf "%v" .) }}
+            {{ $card_target = "target=\"_blank\" rel=\"noopener\"" }}
+          {{ end }}
+          {{/* The card leads to the project page. A `live` link stays a button inside it. */}}
+
+          {{/* Title */}}
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+            <a href="{{ $card_link }}" {{ $card_target | safeHTMLAttr }} class="stretched-link">
+              {{ $item.Title }}
+            </a>
+          </h3>
+
+          {{ $venue := "" }}
+          {{ $venue_raw := $item.Params.conference }}
+          {{ if not $venue_raw }}
+            {{ $venue_raw = $item.Params.venue }}
+          {{ end }}
+          {{ if eq (printf "%T" $venue_raw) "string" }}
+            {{ $venue = strings.TrimSpace $venue_raw }}
+          {{ end }}
+          {{ if $venue }}
+          <p class="text-sm font-semibold text-primary-700 dark:text-primary-300 mb-2">
+            {{ $venue }}
+          </p>
+          {{ end }}
+          
+          {{/* Summary */}}
+          {{ $summary := "" }}
+          {{ $summary_raw := $item.Params.summary }}
+          {{ if $summary_raw }}
+            {{ $summary = strings.TrimSpace (printf "%v" $summary_raw) }}
+          {{ end }}
+          {{ if $summary }}
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            {{ $summary | $page.RenderString }}
+          </p>
+          {{ else }}
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            {{ $item.Summary | truncate 100 }}
+          </p>
+          {{ end }}
+
+          {{/* Authors + Venue metadata */}}
+          {{ $authors := slice }}
+          {{ $authors_raw := $item.Params.card_authors }}
+          {{ if not $authors_raw }}
+            {{ $authors_raw = $item.Params.authors }}
+          {{ end }}
+          {{ if reflect.IsSlice $authors_raw }}
+            {{ range $authors_raw }}
+              {{ $author := strings.TrimSpace (printf "%v" .) }}
+              {{ if $author }}{{ $authors = $authors | append $author }}{{ end }}
+            {{ end }}
+          {{ else if eq (printf "%T" $authors_raw) "string" }}
+            {{ $authors_string := strings.TrimSpace $authors_raw }}
+            {{ if $authors_string }}
+              {{ if strings.Contains $authors_string "," }}
+                {{ range (split $authors_string ",") }}
+                  {{ $author := strings.TrimSpace . }}
+                  {{ if $author }}{{ $authors = $authors | append $author }}{{ end }}
+                {{ end }}
+              {{ else }}
+                {{ $authors = slice $authors_string }}
+              {{ end }}
+            {{ end }}
+          {{ end }}
+
+          {{ if gt (len $authors) 0 }}
+          <div class="mb-4 text-xs text-gray-500 dark:text-gray-400">
+            {{ if gt (len $authors) 0 }}
+            <p class="line-clamp-2">
+              {{ range $index, $author := $authors }}
+                {{ if gt $index 0 }}, {{ end }}
+                {{ $rendered_author := $author }}
+                {{ if in $author "Mohamed Abdelfattah" }}
+                  {{ $rendered_author = replaceRE "Mohamed Abdelfattah\\*?" "<strong class=\"text-gray-900 dark:text-white\">$0</strong>" $author }}
+                {{ end }}
+                {{ $rendered_author | safeHTML }}
+              {{ end }}
+            </p>
+            {{ end }}
+          </div>
+          {{ end }}
+
+          {{/* Topic Tags for consistency with bio/publications taxonomy */}}
+          {{ $normalized_topic_tags := slice }}
+          {{ range $tags }}
+            {{ $key := lower (strings.TrimSpace .) }}
+            {{ $canonical := "" }}
+            {{ if or (eq $key "multimodal") (eq $key "multimodal learning") }}
+              {{ $canonical = "Multimodal Learning" }}
+            {{ else if or (eq $key "egocentric vision") (eq $key "egocentric perception") }}
+              {{ $canonical = "Egocentric Vision" }}
+            {{ else if or (eq $key "action recognition") (eq $key "skeletal action recognition") }}
+              {{ $canonical = "Action Recognition" }}
+            {{ else if or (eq $key "world modelling") (eq $key "world modeling") }}
+              {{ $canonical = "World Modelling" }}
+            {{ else if or (eq $key "self-supervised learning") (eq $key "self supervised learning") (eq $key "self-supervised") }}
+              {{ $canonical = "Self-supervised Learning" }}
+            {{ else if or (eq $key "llms") (eq $key "llm") (eq $key "large language models") }}
+              {{ $canonical = "LLMs" }}
+            {{ else if or (eq $key "datasets") (eq $key "dataset") }}
+              {{ $canonical = "Datasets" }}
+            {{ else if or (eq $key "semantic segmentation") (eq $key "segmentation") }}
+              {{ $canonical = "Semantic Segmentation" }}
+            {{ else if eq $key "pose estimation" }}
+              {{ $canonical = "Pose Estimation" }}
+            {{ end }}
+            {{ if and $canonical (not (in $normalized_topic_tags $canonical)) }}
+              {{ $normalized_topic_tags = $normalized_topic_tags | append $canonical }}
+            {{ end }}
+          {{ end }}
+          {{ if gt (len $normalized_topic_tags) 0 }}
+          <div class="flex flex-wrap gap-2 mb-4 min-h-[2.2rem]">
+            {{ range $normalized_topic_tags }}
+            {{ $tag_class := "bg-slate-50 dark:bg-slate-700/25 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-500/40" }}
+            {{ if eq . "Multimodal Learning" }}
+              {{ $tag_class = "bg-blue-50 dark:bg-blue-500/15 text-blue-700 dark:text-blue-200 border-blue-200 dark:border-blue-400/30" }}
+            {{ else if eq . "Egocentric Vision" }}
+              {{ $tag_class = "bg-cyan-50 dark:bg-cyan-500/15 text-cyan-700 dark:text-cyan-200 border-cyan-200 dark:border-cyan-400/30" }}
+            {{ else if eq . "Action Recognition" }}
+              {{ $tag_class = "bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/30" }}
+            {{ else if eq . "World Modelling" }}
+              {{ $tag_class = "bg-violet-50 dark:bg-violet-500/15 text-violet-700 dark:text-violet-200 border-violet-200 dark:border-violet-400/30" }}
+            {{ else if eq . "Self-supervised Learning" }}
+              {{ $tag_class = "bg-amber-50 dark:bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-400/30" }}
+            {{ else if eq . "LLMs" }}
+              {{ $tag_class = "bg-rose-50 dark:bg-rose-500/15 text-rose-700 dark:text-rose-200 border-rose-200 dark:border-rose-400/30" }}
+            {{ else if eq . "Datasets" }}
+              {{ $tag_class = "bg-orange-50 dark:bg-orange-500/15 text-orange-700 dark:text-orange-200 border-orange-200 dark:border-orange-400/30" }}
+            {{ else if eq . "Semantic Segmentation" }}
+              {{ $tag_class = "bg-lime-50 dark:bg-lime-500/15 text-lime-700 dark:text-lime-200 border-lime-200 dark:border-lime-400/30" }}
+            {{ else if eq . "Pose Estimation" }}
+              {{ $tag_class = "bg-indigo-50 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-200 border-indigo-200 dark:border-indigo-400/30" }}
+            {{ end }}
+            <span class="px-3 py-1 text-xs font-semibold rounded-full border h-fit {{ $tag_class }}">
+              {{ . }}
+            </span>
+            {{ end }}
+          </div>
+          {{ end }}
+
+          {{/* Action Links - pushed to bottom with mt-auto */}}
+          {{ $built_links := partial "functions/build_links" (dict "page" $item "is_list" true) }}
+          {{ $fallbackByKey := dict
+            "btn_pdf" "PDF"
+            "btn_preprint" "Preprint"
+            "btn_doi" "DOI"
+            "btn_code" "Code"
+            "btn_dataset" "Dataset"
+            "btn_model" "Model"
+            "btn_slides" "Slides"
+            "btn_video" "Video"
+            "btn_poster" "Poster"
+            "btn_project" "Project"
+            "btn_site" "Site"
+            "btn_source" "Source"
+            "btn_canonical" "Canonical"
+            "btn_crosspost" "Crosspost"
+            "btn_discussion" "Discussion"
+            "btn_event" "Event"
+            "btn_calendar" "Calendar"
+            "btn_registration" "Registration"
+            "btn_demo" "Demo"
+            "btn_cite" "Cite"
+          }}
+          {{ $card_actions := slice }}
+          {{ range $built_links }}
+            {{ if in .contexts "list" }}
+              {{ $url := .url | default "" }}
+              {{ $scheme := (urls.Parse $url).Scheme }}
+              {{ $target := "" }}
+              {{ $rel := slice }}
+              {{ with .rel }}{{ $rel = . }}{{ end }}
+              {{ if not $scheme }}
+                {{ with ($item.Resources.GetMatch $url) }}
+                  {{ $url = .RelPermalink }}
+                {{ end }}
+                {{ if and (not ($item.Resources.GetMatch $url)) (not (hasPrefix $url "#")) }}
+                  {{ $url = $url | relURL }}
+                {{ end }}
+              {{ else if in (slice "http" "https") $scheme }}
+                {{ $target = "target=\"_blank\"" }}
+                {{ $rel = $rel | append "noopener noreferrer" }}
+              {{ end }}
+
+              {{ $label := .label }}
+              {{ with .labelKey }}
+                {{ if not $label }}
+                  {{ $label = (i18n .) | default (index $fallbackByKey .) | default "Link" }}
+                {{ end }}
+              {{ end }}
+              {{ if not $label }}
+                {{ $label = "Link" }}
+              {{ end }}
+
+              {{ $card_actions = $card_actions | append (dict
+                "type" .type
+                "url" $url
+                "icon" (.icon | default "hero/link")
+                "label" $label
+                "target" $target
+                "rel" $rel
+              ) }}
+            {{ end }}
+          {{ end }}
+          {{ if gt (len $card_actions) 0 }}
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100 dark:border-white/5 mt-auto">
+            {{ range $card_actions }}
+              {{ $icon := index . "icon" | default "hero/link" }}
+              {{ $label := index . "label" | default "Link" }}
+              {{ $link_url := index . "url" }}
+              {{ $link_type := index . "type" | default "custom" }}
+              {{ if eq $link_type "bibtex" }}
+              <button
+                class="relative z-10 inline-flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors js-cite-clipboard cursor-pointer"
+                type="button"
+                data-filename="{{ $link_url }}"
+                onclick="event.stopPropagation();"
+              >
+                {{ partial "functions/get_icon" (dict "name" $icon "attributes" "class=\"w-4 h-4\"") }}
+                <span>{{ $label }}</span>
+              </button>
+              {{ else }}
+              <a
+                href="{{ $link_url | safeURL }}"
+                {{ with index . "target" }}{{ . | safeHTMLAttr }}{{ end }}
+                {{ with index . "rel" }}rel="{{ delimit . " " }}"{{ end }}
+                class="relative z-10 inline-flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                onclick="event.stopPropagation();"
+              >
+                {{ partial "functions/get_icon" (dict "name" $icon "attributes" "class=\"w-4 h-4\"") }}
+                <span>{{ $label }}</span>
+              </a>
+              {{ end }}
+            {{ end }}
+          </div>
+          {{ end }}
+        </div>
+      </article>
+    {{ end }}
+  </div>
+
+  {{/* View All Link */}}
+  {{/* Smart default: show link if there are more items than displayed, unless explicitly disabled */}}
+  {{ $archive := index $content "archive" }}
+  {{ if not (reflect.IsMap $archive) }}{{ $archive = dict }}{{ end }}
+  {{ $default_show_archive := false }}
+  {{ $default_show_archive = gt $total_count $displayed_count }}
+  {{ $show_archive_link := partial "functions/coerce_bool" (dict "value" (index $archive "enable") "default" $default_show_archive) }}
+  {{ if and $show_archive_link $archive_page }}
+    {{ $archive_link := "" }}
+    {{ $archive_link_raw := index $archive "link" }}
+    {{ if eq (printf "%T" $archive_link_raw) "string" }}
+      {{ $archive_link = strings.TrimSpace $archive_link_raw }}
+    {{ end }}
+    {{ if not $archive_link }}
+      {{ $archive_link = $archive_page.RelPermalink }}
+    {{ end }}
+    {{ $archive_target := "" }}
+    {{ $archive_scheme := (urls.Parse $archive_link).Scheme }}
+    {{ if not $archive_scheme }}
+      {{ if not (hasPrefix $archive_link "#") }}
+        {{ $archive_link = $archive_link | relLangURL }}
+      {{ end }}
+    {{ else if in (slice "http" "https") $archive_scheme }}
+      {{ $archive_target = "target=\"_blank\" rel=\"noopener\"" }}
+    {{ end }}
+    
+    {{ $archive_text := "" }}
+    {{ $archive_text_raw := index $archive "text" }}
+    {{ if eq (printf "%T" $archive_text_raw) "string" }}
+      {{ $archive_text = strings.TrimSpace $archive_text_raw }}
+    {{ end }}
+    {{ if not $archive_text }}{{ $archive_text = i18n "portfolio_view_all" | default "View All Projects" }}{{ end }}
+    
+    <div class="text-center mt-12">
+      <a 
+        href="{{ $archive_link | safeURL }}" 
+        {{ $archive_target | safeHTMLAttr }}
+        class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-gray-800 dark:text-white bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-full hover:bg-gray-200 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/20 transition-all duration-300"
+      >
+        {{ $archive_text | emojify }}
+        {{ partial "functions/get_icon" (dict "name" "arrow-right" "attributes" "class=\"w-4 h-4\"") }}
+      </a>
+    </div>
+  {{ end }}
+</div>

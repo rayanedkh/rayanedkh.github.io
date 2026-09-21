@@ -1,0 +1,145 @@
+{{/* Hugo Blox: Resume Education (local override) */}}
+
+{{ $page := .wcPage }}
+{{ $block := .wcBlock }}
+{{ $content := $block.content }}
+{{ if not (reflect.IsMap $content) }}{{ $content = dict }}{{ end }}
+
+{{ $title := "Education" }}
+{{ with index $content "title" }}
+  {{ $title = strings.TrimSpace (printf "%v" .) }}
+{{ end }}
+
+{{ $date_format := "Jan 2006" }}
+{{ with index $content "date_format" }}
+  {{ $candidate := strings.TrimSpace (printf "%v" .) }}
+  {{ if ne $candidate "" }}{{ $date_format = $candidate }}{{ end }}
+{{ end }}
+
+{{ $owner := dict }}
+{{ range $key, $author := hugo.Data.authors }}
+  {{ if and (reflect.IsMap $author) (eq (index $author "is_owner") true) }}
+    {{ $owner = $author }}
+  {{ end }}
+{{ end }}
+{{ if and (eq (len $owner) 0) (isset hugo.Data.authors "me") }}
+  {{ $owner = index hugo.Data.authors "me" }}
+{{ end }}
+
+{{ $items := slice }}
+{{ if reflect.IsMap $owner }}
+  {{ $edu := index $owner "education" }}
+  {{ if reflect.IsSlice $edu }}{{ $items = $edu }}{{ end }}
+{{ end }}
+
+<div class="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+  <div class="flex flex-col gap-16">
+    <div class="w-full">
+      <h2 class="mb-10 text-3xl font-bold text-gray-900 dark:text-white text-center">{{ $title }}</h2>
+
+      <div class="relative">
+        <div class="absolute left-4 sm:left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-500 via-primary-400 to-primary-600/50"></div>
+
+        <div class="space-y-8">
+          {{ range $items }}
+            {{ $degree := strings.TrimSpace (printf "%v" (index . "degree")) }}
+            {{ $institution := strings.TrimSpace (printf "%v" (index . "institution")) }}
+            {{ $institution_url := strings.TrimSpace (printf "%v" (index . "institution_url")) }}
+            {{ $institution_logo := strings.TrimSpace (printf "%v" (index . "institution_logo")) }}
+            {{ $location := strings.TrimSpace (printf "%v" (index . "location")) }}
+            {{ $summary := strings.TrimSpace (printf "%v" (index . "summary")) }}
+            {{ $end_offset_months := 0 }}
+            {{ with index . "end_offset_months" }}
+              {{ $end_offset_months = int . }}
+            {{ end }}
+            {{ $end_expected := false }}
+            {{ with index . "end_expected" }}
+              {{ if . }}{{ $end_expected = true }}{{ end }}
+            {{ end }}
+
+            {{ $date_display := "" }}
+            {{ with index . "date" }}{{ $date_display = strings.TrimSpace (printf "%v" .) }}{{ end }}
+            {{ if gt $end_offset_months 0 }}
+              {{ $date_display = time.Format $date_format (now.AddDate 0 $end_offset_months 0) }}
+              {{ if $end_expected }}{{ $date_display = printf "%s (Expected)" $date_display }}{{ end }}
+            {{ else if eq $date_display "" }}
+              {{ $start_display := "" }}
+              {{ with index . "start" }}
+                {{ $start_display = time.Format $date_format (time.AsTime (printf "%v" .)) }}
+              {{ end }}
+
+              {{ $end_display := "Present" }}
+              {{ with index . "end" }}
+                {{ $end_display = time.Format $date_format (time.AsTime (printf "%v" .)) }}
+              {{ end }}
+              {{ if $end_expected }}{{ $end_display = printf "%s (Expected)" $end_display }}{{ end }}
+
+              {{ if and (ne $start_display "") (ne $end_display "") }}
+                {{ $date_display = printf "%s → %s" $start_display $end_display }}
+              {{ else if ne $end_display "" }}
+                {{ $date_display = $end_display }}
+              {{ end }}
+            {{ end }}
+
+            <div class="group relative pl-12 sm:pl-16">
+              <div class="absolute left-0 sm:left-2 top-6 flex items-center justify-center">
+                <div class="relative">
+                  <div class="absolute inset-0 w-8 h-8 bg-primary-500/30 rounded-full blur-md group-hover:bg-primary-500/50 transition-all duration-300"></div>
+                  <div class="relative w-8 h-8 bg-white dark:bg-gray-900 border-2 border-primary-500 rounded-full flex items-center justify-center group-hover:border-primary-400 group-hover:scale-110 transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256" class="w-4 h-4 text-primary-600 dark:text-primary-400"><path d="M251.76,88.94l-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87V168a8,8,0,0,0,4.84,7.36C37.67,175.68,57.6,184,80,184c8.82,0,17.42-1.31,25.58-3.88A8,8,0,0,0,111,172.5V129.6l13.24,7.06a8,8,0,0,0,7.52,0l120-64a8,8,0,0,0,0-14.12ZM80,168c-13.13,0-25.45-3-32-5.31V126.4l48,25.6v13.68C91.06,167.22,85.59,168,80,168Zm48-47.37L25,64,128,9.07,231,64Z"></path></svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="relative bg-white dark:bg-white/[0.02] backdrop-blur-sm rounded-xl border border-gray-200 dark:border-white/[0.06] p-6 hover:bg-gray-50 dark:hover:bg-white/[0.04] hover:border-primary-300 dark:hover:border-primary-500/30 transition-all duration-300 group-hover:translate-x-1 shadow-sm dark:shadow-none">
+                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+                  <div class="min-w-0 flex items-start gap-3">
+                    {{ if ne $institution_logo "" }}
+                      <span class="cv-logo-slot inline-flex items-center justify-center shrink-0">
+                        <img src="{{ $institution_logo }}" alt="{{ $institution }} logo" class="cv-logo-img" loading="lazy" decoding="async">
+                      </span>
+                    {{ end }}
+                    <div>
+                      <h3 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors leading-snug">{{ $degree }}</h3>
+                      <p class="text-primary-600 dark:text-primary-400 font-medium mt-1">
+                        {{ if ne $institution_url "" }}
+                          <a href="{{ $institution_url }}" target="_blank" rel="noopener" class="no-underline hover:text-primary-700 dark:hover:text-primary-300 transition-colors">{{ $institution }}</a>
+                        {{ else }}
+                          {{ $institution }}
+                        {{ end }}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col gap-1.5 text-sm text-gray-500 dark:text-gray-400 shrink-0 sm:min-w-[220px] sm:items-start">
+                    {{ if ne $date_display "" }}
+                      <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <time>{{ $date_display }}</time>
+                      </div>
+                    {{ end }}
+                    {{ if ne $location "" }}
+                      <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>{{ $location }}</span>
+                      </div>
+                    {{ end }}
+                  </div>
+                </div>
+
+                {{ if ne $summary "" }}
+                  <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400 leading-relaxed prose-a:text-primary-600 dark:prose-a:text-primary-400 prose-a:font-medium prose-a:no-underline hover:prose-a:no-underline prose-a:hover:text-primary-700 dark:prose-a:hover:text-primary-300">{{ $summary | markdownify }}</div>
+                {{ end }}
+              </div>
+            </div>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

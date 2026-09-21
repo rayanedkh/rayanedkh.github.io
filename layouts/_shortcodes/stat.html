@@ -1,0 +1,5 @@
+{{ $v := .Get "value" }}{{ $u := .Get "unit" }}
+<div class="pk-stat">
+  <span class="pk-stat__v">{{ $v }}{{ with $u }}<small>{{ . }}</small>{{ end }}</span>
+  <span class="pk-stat__l">{{ .Get "label" }}</span>
+</div>

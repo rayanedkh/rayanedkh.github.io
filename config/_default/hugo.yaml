@@ -6,7 +6,7 @@
 # Website name (set in params.yaml under hugoblox.branding.name)
 title: ''
 # Website URL
-baseURL: 'https://example.com/'
+baseURL: 'https://rayanedkh.github.io/'
 
 ############################
 ## LANGUAGE
@@ -37,9 +37,12 @@ outputs:
   section: [HTML, RSS]
 imaging:
   resampleFilter: lanczos
-  quality: 90
   anchor: smart
-  hint: picture
+  jpeg:
+    quality: 90
+  webp:
+    quality: 90
+    hint: picture
 timeout: 600000
 taxonomies:
   author: authors
@@ -51,5 +54,15 @@ markup:
     lineNos: false
 security:
   _merge: deep
+  # Tailwind CSS v4 runs through the `tailwindcss` binary; Hugo must be allowed to exec it.
+  exec:
+    allow:
+      - '^(dart-)?sass$'
+      - '^go$'
+      - '^git$'
+      - '^node$'
+      - '^npx$'
+      - '^postcss$'
+      - '^tailwindcss$'
 sitemap:
   _merge: deep

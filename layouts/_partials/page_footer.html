@@ -1,0 +1,12 @@
+{{/* Local override of the Hugo Blox page footer.
+
+     Dropped from upstream:
+       components/page_sharer  the Facebook, WhatsApp and X share buttons
+       page_author             the author card repeating the whole hero bio
+     Everything else is kept. */}}
+<div class="max-w-prose print:hidden">
+  {{ partial "tags" . }}
+  {{ partial "components/next-in-series" . }}
+  {{ partial "page_related" . }}
+  {{ partial "comments" . }}
+</div>

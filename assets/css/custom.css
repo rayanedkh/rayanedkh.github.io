@@ -1,0 +1,775 @@
+/* Fixed Navigation Bar */
+.page-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 1000 !important;
+  background: var(--color-header-bg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Add padding to page body to account for fixed header */
+.page-wrapper {
+  padding-top: 60px;
+}
+
+html:not(.dark) .home-section-bg[style*="--light-bg-color"] {
+  background-color: var(--light-bg-color) !important;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.page-wrapper,
+main {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Scroll reveal: float-in effect for cards */
+.float-in-reveal {
+  opacity: 0;
+  transform: translateY(18px) scale(0.985);
+  transition: opacity 420ms ease, transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+.float-in-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float-in-reveal,
+  .float-in-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Navbar social icons */
+.navbar-social-icon {
+  color: var(--color-header-fg);
+  opacity: 0.8;
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  will-change: transform;
+}
+
+.navbar-social-icon:hover {
+  opacity: 1;
+  color: var(--color-primary-500);
+  transform: translateY(-2px) scale(1.2);
+}
+
+.about-me-interlude .article-style,
+.about-me-interlude .universal-wrapper {
+  max-width: none;
+}
+
+.about-me-glow {
+  position: relative;
+}
+
+.about-me-glow::before {
+  content: "";
+  position: absolute;
+  inset: 1.75rem 8% auto;
+  height: 11rem;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(125, 211, 252, 0.18) 0%, rgba(125, 211, 252, 0) 72%);
+  filter: blur(28px);
+  pointer-events: none;
+}
+
+.about-me-shell {
+  position: relative;
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.about-me-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.2rem;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 2rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.78));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 24px 60px -40px rgba(15, 23, 42, 0.22);
+}
+
+.about-me-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.24), transparent 36%),
+    radial-gradient(circle at top right, rgba(125, 211, 252, 0.15), transparent 32%);
+  pointer-events: none;
+}
+
+.about-me-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.95fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.about-me-copy,
+.about-me-quote {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.about-me-copy {
+  padding: 1.6rem 1.7rem;
+}
+
+.about-me-kicker {
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.about-me-title {
+  margin: 0 0 0.75rem;
+  font-size: clamp(2rem, 3.5vw, 2.9rem);
+  line-height: 0.98;
+  color: #0f172a;
+  letter-spacing: -0.03em;
+}
+
+.about-me-intro-text {
+  margin: 0;
+  max-width: 34rem;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #475569;
+  font-weight: 500;
+}
+
+.about-me-vibes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+  width: 100%;
+}
+
+.vibe-item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.95rem 1rem;
+  border-radius: 1.15rem;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  min-height: 5.5rem;
+}
+
+.vibe-item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(96, 165, 250, 0.35);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 16px 30px -24px rgba(15, 23, 42, 0.2);
+}
+
+.vibe-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.15rem;
+  height: 3.15rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #eff6ff, #ffffff);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+}
+
+.vibe-emoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.vibe-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.18rem;
+}
+
+.vibe-index {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.vibe-label {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.15;
+}
+
+.about-me-quote {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 1.35rem 1.45rem 1.25rem;
+  background:
+    linear-gradient(135deg, rgba(240, 249, 255, 0.96), rgba(248, 250, 252, 0.98) 60%, rgba(255, 255, 255, 0.95));
+}
+
+.quote-orb {
+  position: absolute;
+  right: -1rem;
+  top: -1rem;
+  width: 7rem;
+  height: 7rem;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(125, 211, 252, 0.28), rgba(125, 211, 252, 0) 72%);
+  pointer-events: none;
+}
+
+.quote-label {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #475569;
+}
+
+.quote-mark {
+  margin: 0;
+  font-size: 2.4rem;
+  line-height: 0.8;
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.quote-text {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.58;
+  font-style: italic;
+  color: #0f172a;
+  font-weight: 500;
+  max-width: 24rem;
+}
+
+.quote-author {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dark .about-me-kicker {
+  color: #94a3b8;
+}
+
+.dark .about-me-title,
+.dark .quote-text {
+  color: #e5eef9;
+}
+
+.dark .about-me-intro-text,
+.dark .quote-label {
+  color: #cbd5e1;
+}
+
+.dark .vibe-index,
+.dark .quote-author {
+  color: #94a3b8;
+}
+
+.dark .vibe-item {
+  border-color: rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.dark .vibe-item:hover {
+  border-color: rgba(148, 163, 184, 0.3);
+  background: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.dark .vibe-label {
+  color: #e5eef9;
+}
+
+.dark .about-me-panel {
+  border-color: rgba(148, 163, 184, 0.12);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.32), rgba(15, 23, 42, 0.18));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.dark .about-me-copy,
+.dark .about-me-quote {
+  border-color: rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.62);
+}
+
+.dark .about-me-quote {
+  background:
+    linear-gradient(135deg, rgba(30, 41, 59, 0.88), rgba(15, 23, 42, 0.94) 68%, rgba(15, 23, 42, 0.9));
+  box-shadow: none;
+}
+
+.dark .vibe-icon-wrap {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    inset 0 0 0 1px rgba(148, 163, 184, 0.12);
+}
+
+@media (max-width: 768px) {
+  .about-me-panel {
+    padding: 1rem;
+    gap: 0.9rem;
+  }
+
+  .about-me-top {
+    grid-template-columns: 1fr;
+  }
+
+  .about-me-copy {
+    padding: 1.3rem 1.25rem;
+  }
+
+  .about-me-vibes {
+    gap: 0.75rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .about-me-quote,
+  .vibe-item {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-me-panel {
+    padding: 0.9rem;
+    gap: 0.8rem;
+  }
+
+  .about-me-copy {
+    padding: 1.1rem 1rem;
+  }
+
+  .about-me-title {
+    font-size: 1.8rem;
+  }
+
+  .vibe-emoji {
+    font-size: 1.45rem;
+  }
+
+  .vibe-label {
+    font-size: 0.82rem;
+  }
+
+  .about-me-vibes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .quote-text {
+    font-size: 1rem;
+  }
+}
+
+/* ── Contact: keep the email address on a single line ───────────────────────
+   rayane.dakhlaoui@telecom-paris.fr is long enough to wrap inside the
+   two-column contact card, so it scales with the viewport instead. */
+#contact button.group p.text-lg {
+  white-space: nowrap;
+  font-size: clamp(0.8rem, 2.4vw, 1.05rem);
+}
+
+/* ── Hero role lines: room for the full Télécom lockup ─────────────────────
+   The Télécom Paris logo is a portrait lockup that includes the
+   "Institut Polytechnique de Paris" line, so it needs a taller line box. */
+
+/* ==========================================================================
+   Research interest chips inside the hero bio
+   The bio is raw HTML in data/authors/me.yaml, which the Tailwind source scan
+   does not read, so these are plain CSS. Each tone declares both a light and a
+   dark value so the theme toggle never leaves text unreadable.
+   ========================================================================== */
+
+.ri-label {
+  margin: 1.6rem 0 0.55rem !important;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.dark .ri-label { color: #94a3b8; }
+
+.ri-wrap {
+  margin: 0 !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.ri-chip {
+  display: inline-block;
+  border-radius: 9999px;
+  padding: 0.24rem 0.66rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.ri-chip:hover { opacity: 0.82; transform: translateY(-1px); }
+
+.ri-amber   { background: #fffbeb; color: #b45309; border-color: #fde68a; }
+.ri-rose    { background: #fff1f2; color: #be123c; border-color: #fecdd3; }
+.ri-violet  { background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe; }
+.ri-blue    { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+.ri-cyan    { background: #ecfeff; color: #0e7490; border-color: #a5f3fc; }
+.ri-emerald { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+.ri-teal    { background: #f0fdfa; color: #0f766e; border-color: #99f6e4; }
+
+.dark .ri-amber   { background: rgba(217,119,6,0.22);  color: #fde68a; border-color: rgba(252,211,77,0.4); }
+.dark .ri-rose    { background: rgba(225,29,72,0.22);  color: #fecdd3; border-color: rgba(253,164,175,0.4); }
+.dark .ri-violet  { background: rgba(124,58,237,0.22); color: #ddd6fe; border-color: rgba(196,181,253,0.4); }
+.dark .ri-blue    { background: rgba(37,99,235,0.22);  color: #bfdbfe; border-color: rgba(147,197,253,0.4); }
+.dark .ri-cyan    { background: rgba(8,145,178,0.22);  color: #bae6fd; border-color: rgba(125,211,252,0.4); }
+.dark .ri-emerald { background: rgba(5,150,105,0.22);  color: #a7f3d0; border-color: rgba(110,231,183,0.4); }
+.dark .ri-teal    { background: rgba(13,148,136,0.22); color: #99f6e4; border-color: rgba(94,234,212,0.4); }
+
+/* Hero bio: paragraphs and underlined links */
+
+.navbar-avatar {
+  height: 26px;
+  width: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ── Section backgrounds: follow the site theme, not the desktop ───────────
+   The module ships
+     @media (prefers-color-scheme: dark) { .home-section-bg[style*="--dark-bg-color"] { … } }
+   which repaints every section from the OS preference even when the site is
+   in light mode, so a light page looks black on a dark desktop. The rule
+   below restores the light value whenever the `dark` class is absent, which
+   is the state the theme toggle and the theme picker actually control.
+   The module writes the light colour as an inline `background-color` and only
+   the dark one as a custom property, so the light value is repeated here. */
+#intro             .home-section-bg { --light-bg-color: #fafafa; }
+#featured-projects .home-section-bg { --light-bg-color: #ffffff; }
+#experience        .home-section-bg { --light-bg-color: #f5f5f5; }
+#education         .home-section-bg { --light-bg-color: #ffffff; }
+#volunteering      .home-section-bg { --light-bg-color: #f5f5f5; }
+#contact           .home-section-bg { --light-bg-color: #ffffff; }
+
+@media (prefers-color-scheme: dark) {
+  html:not(.dark) .home-section-bg[style*="--dark-bg-color"] {
+    background-color: var(--light-bg-color, #ffffff) !important;
+  }
+}
+
+/* Prose bio in the introduction */
+.intro-bio { margin-top: 1.6rem; }
+.intro-bio p { margin: 0 0 0.9rem; font-size: 1.02rem; line-height: 1.72; }
+.intro-bio p:last-child { margin-bottom: 0; }
+
+/* Pixel avatar in the navbar, left of the site name */
+.navbar-avatar {
+  height: 26px;
+  width: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Links inside the introduction: underlined so they read as clickable */
+.intro-bio a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  font-weight: 500;
+}
+
+/* ── Hero bio: paragraph rhythm and visible links ─────────────────────────── */
+.hero-bio p {
+  margin: 0 0 0.95rem;
+  font-size: 1.02rem;
+  line-height: 1.72;
+  color: #334155;
+}
+
+.dark .hero-bio p { color: #cbd5e1; }
+
+.hero-bio p:last-child { margin-bottom: 0; }
+
+/* Prose links only. The chips carry their own topic colour, and a plain
+   `.hero-bio a` rule would outrank it on specificity and turn them all blue. */
+.hero-bio a:not(.ri-chip) {
+  color: #1d4ed8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  font-weight: 500;
+}
+
+.hero-bio a:not(.ri-chip):hover { opacity: 0.8; }
+
+.dark .hero-bio a:not(.ri-chip) { color: #93c5fd; }
+
+/* The label and chip rows are not body copy */
+.hero-bio p.ri-label,
+.hero-bio p.ri-wrap { color: inherit; }
+
+/* Chips are buttons, not prose links */
+.hero-bio a.ri-chip { text-decoration: none; font-weight: 600; }
+
+@media (max-width: 640px) {
+  .hero-avatar { width: 64px; }
+  .hero-head { gap: 0.8rem; }
+}
+
+/* ── Experience and Education logos ───────────────────────────────────────
+   Sized by height so wordmarks of very different proportions read at a
+   similar optical size. Volunteering keeps the block's own smaller slot. */
+.cv-logo-slot { width: 64px; height: 52px; }
+.cv-logo-img  { max-width: 100%; max-height: 52px; width: auto; height: auto; object-fit: contain; }
+
+/* ==========================================================================
+   Project article furniture
+   Kicker, lede, headline figures, metadata list and inline document viewer.
+   Shapes follow the reference portfolio; colours come from theme tokens so
+   both modes stay legible.
+   ========================================================================== */
+
+.pk-kicker {
+  margin: 0 0 0.5rem !important;
+  font-size: 0.84rem;
+  color: #64748b;
+}
+
+.dark .pk-kicker { color: #94a3b8; }
+
+.pk-lede {
+  font-size: 1.22rem !important;
+  line-height: 1.5 !important;
+  color: #334155;
+  margin: 0 0 1.5rem !important;
+}
+
+.dark .pk-lede { color: #cbd5e1; }
+
+/* ── Headline figures ─────────────────────────────────────────────────────── */
+
+.pk-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem 1.25rem;
+  margin: 0.25rem 0 0;
+  padding: 1.15rem 0;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dark .pk-stats { border-color: rgba(148, 163, 184, 0.22); }
+
+.pk-stat__v {
+  display: block;
+  font-weight: 600;
+  font-size: 1.75rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+}
+
+.dark .pk-stat__v { color: #f1f5f9; }
+
+.pk-stat__v small {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #475569;
+  margin-left: 2px;
+}
+
+.dark .pk-stat__v small { color: #cbd5e1; }
+
+.pk-stat__l {
+  display: block;
+  font-size: 0.82rem;
+  color: #64748b;
+  margin-top: 0.3rem;
+  line-height: 1.35;
+}
+
+.dark .pk-stat__l { color: #94a3b8; }
+
+/* ── Metadata list ────────────────────────────────────────────────────────── */
+
+.pk-meta {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 0.5rem 1.4rem;
+  margin: 1.35rem 0 2.2rem;
+  padding-bottom: 1.35rem;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.93rem;
+}
+
+.dark .pk-meta { border-color: rgba(148, 163, 184, 0.22); }
+
+.pk-meta dt {
+  margin: 0;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.dark .pk-meta dt { color: #94a3b8; }
+
+.pk-meta dd { margin: 0; color: #334155; }
+.dark .pk-meta dd { color: #cbd5e1; }
+.pk-meta dd p { margin: 0; }
+
+@media (max-width: 600px) {
+  .pk-meta { grid-template-columns: minmax(0, 1fr); gap: 0.15rem 0; }
+  .pk-meta dt { margin-top: 0.7rem; }
+}
+
+/* ── Inline document viewer ───────────────────────────────────────────────── */
+
+.pk-doc {
+  margin: 2rem 0 2.4rem;
+}
+
+.pk-doc iframe {
+  display: block;
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background: #ffffff;
+}
+
+.dark .pk-doc iframe { border-color: rgba(148, 163, 184, 0.22); }
+
+.pk-doc figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+  margin-top: 0.55rem;
+  font-size: 0.84rem;
+  color: #64748b;
+}
+
+.dark .pk-doc figcaption { color: #94a3b8; }
+
+.pk-doc figcaption a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.pk-doc figcaption a:hover { color: #1d4ed8; }
+.dark .pk-doc figcaption a:hover { color: #93c5fd; }
+
+@media (max-width: 640px) {
+  .pk-doc iframe { height: 460px !important; }
+}
+
+/* ==========================================================================
+   Project article typography
+   The theme sets `lg:prose-xl`, which is larger than the reference portfolio.
+   Bring the measure and the type scale back in line with it: 17px body copy,
+   1.6 line height, and a 660px column.
+   ========================================================================== */
+
+.prose.prose-slate {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  max-width: 41.25rem;
+}
+
+.prose.prose-slate p,
+.prose.prose-slate li {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.prose.prose-slate h1 { font-size: 2rem; line-height: 1.15; }
+.prose.prose-slate h2 { font-size: 1.4rem; line-height: 1.25; margin-top: 2.4em; }
+.prose.prose-slate h3 { font-size: 1.14rem; line-height: 1.3; margin-top: 1.9em; }
+.prose.prose-slate h4 { font-size: 1.02rem; }
+
+.prose.prose-slate table { font-size: 0.94rem; }
+.prose.prose-slate code  { font-size: 0.9em; }
+
+/* The furniture keeps its own scale inside that column */
+.prose.prose-slate .pk-lede { font-size: 1.2rem !important; }
+.prose.prose-slate .pk-kicker { font-size: 0.84rem; }
+.prose.prose-slate .pk-stat__l,
+.prose.prose-slate .pk-meta { font-size: 0.86rem; }
+
+/* ── Hero bio aligned under the name ──────────────────────────────────────
+   The avatar sits to the left of the name, so the body copy is indented by
+   the avatar width plus the gap to line its left edge up with the name. */
+/* Avatar beside the name. Its left edge is the container's left edge, which is
+   the same margin the body copy below starts from. */
+.hero-head {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.1rem;
+  margin-bottom: 1.7rem;
+}
+
+.hero-head__text { min-width: 0; }
+
+.hero-avatar {
+  flex: 0 0 auto;
+  width: 92px;
+  height: auto;
+  /* The sprite sits 8px in from the left of its 32px canvas, which is 23px once
+     scaled to 92px. Pull it back so the character, not the canvas, lines up
+     with the body copy below. */
+  margin: 0 0 0 -23px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+@media (max-width: 640px) {
+  .hero-avatar { width: 64px; }
+}
